@@ -1,4 +1,4 @@
-import {config as dotEnvConfig} from "dotenv";
+import { config as dotEnvConfig } from "dotenv";
 import "@nomiclabs/hardhat-waffle";
 import "@nomiclabs/hardhat-ethers";
 import "@nomiclabs/hardhat-etherscan";
@@ -9,7 +9,8 @@ import "hardhat-contract-sizer";
 import "hardhat-gas-reporter";
 import "hardhat-tracer";
 import "hardhat-etherscan-abi";
-import "solidity-coverage"
+import "solidity-coverage";
+import "hardhat-deploy";
 
 dotEnvConfig();
 // tslint:disable-next-line:no-var-requires
@@ -20,13 +21,17 @@ const argv = require('yargs/yargs')()
       type: "number",
       default: 31337
     },
+    ganacheRpc: {
+      type: "string",
+      default: 'http://127.0.0.1:7545'
+    },
     maticRpcUrl: {
       type: "string",
       default: ''
     },
     mumbaiRpcUrl: {
       type: "string",
-      default: ''
+      default: 'https://matic-mumbai.chainstacklabs.com'
     },
     ethRpcUrl: {
       type: "string",
@@ -35,6 +40,14 @@ const argv = require('yargs/yargs')()
     ftmRpcUrl: {
       type: "string",
       default: ''
+    },
+    meterTestRpcUrl: {
+      type: "string",
+      default: 'https://rpctest.meter.io'
+    },
+    meterMainRpcUrl: {
+      type: "string",
+      default: 'https://rpc.meter.io'
     },
     networkScanKey: {
       type: "string",
@@ -69,14 +82,14 @@ export default {
       forking: !!argv.hardhatChainId && argv.hardhatChainId !== 31337 ? {
         url:
           argv.hardhatChainId === 137 ? argv.maticRpcUrl :
-          argv.hardhatChainId === 250 ? argv.ftmRpcUrl :
-            argv.hardhatChainId === 80001 ? argv.mumbaiRpcUrl :
-              undefined,
+            argv.hardhatChainId === 250 ? argv.ftmRpcUrl :
+              argv.hardhatChainId === 80001 ? argv.mumbaiRpcUrl :
+                undefined,
         blockNumber:
           argv.hardhatChainId === 137 ? argv.maticForkBlock !== 0 ? argv.maticForkBlock : undefined :
-          argv.hardhatChainId === 250 ? argv.ftmForkBlock !== 0 ? argv.ftmForkBlock : undefined :
-            argv.hardhatChainId === 80001 ? argv.mumbaiForkBlock !== 0 ? argv.mumbaiForkBlock : undefined :
-              undefined
+            argv.hardhatChainId === 250 ? argv.ftmForkBlock !== 0 ? argv.ftmForkBlock : undefined :
+              argv.hardhatChainId === 80001 ? argv.mumbaiForkBlock !== 0 ? argv.mumbaiForkBlock : undefined :
+                undefined
       } : undefined,
       accounts: {
         mnemonic: "test test test test test test test test test test test junk",
@@ -106,6 +119,25 @@ export default {
       timeout: 99999,
       accounts: [argv.privateKey],
     },
+    metertest: {
+      url: argv.meterTestRpcUrl,
+      chainId: 83,
+      timeout: 99999,
+      gasPrice: 500000000000,
+      accounts: [process.env.PRIVATE_KEY_0, process.env.PRIVATE_KEY_1, process.env.PRIVATE_KEY_2],
+    },
+    metermain: {
+      url: argv.meterMainRpcUrl,
+      chainId: 82,
+      timeout: 99999,
+      gasPrice: 500000000000,
+      accounts: [process.env.PRIVATE_KEY_0, process.env.PRIVATE_KEY_1],
+    },
+    ganache: {
+      url: argv.ganacheRpc,
+      chainId: 1337,
+      accounts: [process.env.PRIVATE_KEY_0, "0x34cd0e9ec7a0ec36a37db424f720de58223f9cd52e0175c7a972a6a864eb86a5"],
+    },
   },
   etherscan: {
     apiKey: argv.networkScanKey
@@ -118,7 +150,7 @@ export default {
           optimizer: {
             enabled: true,
             runs: 200,
-          }
+          },
         }
       },
     ]

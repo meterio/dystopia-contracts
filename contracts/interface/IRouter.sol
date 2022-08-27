@@ -11,7 +11,7 @@ interface IRouter {
 
     function factory() external view returns (address);
 
-    function WMATIC() external view returns (address);
+    function WMTR() external view returns (address);
 
     function addLiquidity(
         address tokenA,
@@ -23,18 +23,31 @@ interface IRouter {
         uint amountBMin,
         address to,
         uint deadline
-    ) external returns (uint amountA, uint amountB, uint liquidity);
-    
-    function addLiquidityMATIC(
+    )
+        external
+        returns (
+            uint amountA,
+            uint amountB,
+            uint liquidity
+        );
+
+    function addLiquidityMTR(
         address token,
         bool stable,
         uint amountTokenDesired,
         uint amountTokenMin,
-        uint amountMATICMin,
+        uint amountMTRMin,
         address to,
         uint deadline
-    ) external payable returns (uint amountToken, uint amountMATIC, uint liquidity);
-    
+    )
+        external
+        payable
+        returns (
+            uint amountToken,
+            uint amountMTR,
+            uint liquidity
+        );
+
     function removeLiquidity(
         address tokenA,
         address tokenB,
@@ -46,15 +59,15 @@ interface IRouter {
         uint deadline
     ) external returns (uint amountA, uint amountB);
 
-    function removeLiquidityMATIC(
+    function removeLiquidityMTR(
         address token,
         bool stable,
         uint liquidity,
         uint amountTokenMin,
-        uint amountMATICMin,
+        uint amountMTRMin,
         address to,
         uint deadline
-    ) external returns (uint amountToken, uint amountMATIC);
+    ) external returns (uint amountToken, uint amountMTR);
 
     function removeLiquidityWithPermit(
         address tokenA,
@@ -65,19 +78,25 @@ interface IRouter {
         uint amountBMin,
         address to,
         uint deadline,
-        bool approveMax, uint8 v, bytes32 r, bytes32 s
+        bool approveMax,
+        uint8 v,
+        bytes32 r,
+        bytes32 s
     ) external returns (uint amountA, uint amountB);
 
-    function removeLiquidityMATICWithPermit(
+    function removeLiquidityMTRWithPermit(
         address token,
         bool stable,
         uint liquidity,
         uint amountTokenMin,
-        uint amountMATICMin,
+        uint amountMTRMin,
         address to,
         uint deadline,
-        bool approveMax, uint8 v, bytes32 r, bytes32 s
-    ) external returns (uint amountToken, uint amountMATIC);
+        bool approveMax,
+        uint8 v,
+        bytes32 r,
+        bytes32 s
+    ) external returns (uint amountToken, uint amountMTR);
 
     function swapExactTokensForTokens(
         uint amountIn,
@@ -95,14 +114,14 @@ interface IRouter {
         uint deadline
     ) external returns (uint[] memory amounts);
 
-    function swapExactMATICForTokens(
+    function swapExactMTRForTokens(
         uint amountOutMin,
         Route[] calldata routes,
         address to,
         uint deadline
     ) external payable returns (uint[] memory amounts);
 
-    function swapTokensForExactMATIC(
+    function swapTokensForExactMTR(
         uint amountOut,
         uint amountInMax,
         Route[] calldata routes,
@@ -110,7 +129,7 @@ interface IRouter {
         uint deadline
     ) external returns (uint[] memory amounts);
 
-    function swapExactTokensForMATIC(
+    function swapExactTokensForMTR(
         uint amountIn,
         uint amountOutMin,
         Route[] calldata routes,
@@ -118,7 +137,7 @@ interface IRouter {
         uint deadline
     ) external returns (uint[] memory amounts);
 
-    function swapMATICForExactTokens(
+    function swapMTRForExactTokens(
         uint amountOut,
         Route[] calldata routes,
         address to,
@@ -211,7 +230,7 @@ interface IRouter {
         uint deadline
     ) external returns (uint[] memory amounts);
 
-    function swapExactTokensForMATICSupportingFeeOnTransferTokens(
+    function swapExactTokensForMTRSupportingFeeOnTransferTokens(
         uint amountIn,
         uint amountOutMin,
         Route[] calldata routes,
@@ -219,7 +238,7 @@ interface IRouter {
         uint deadline
     ) external;
 
-    function swapExactMATICForTokensSupportingFeeOnTransferTokens(
+    function swapExactMTRForTokensSupportingFeeOnTransferTokens(
         uint amountOutMin,
         Route[] calldata routes,
         address to,
@@ -234,7 +253,7 @@ interface IRouter {
         uint deadline
     ) external;
 
-    function removeLiquidityMATICWithPermitSupportingFeeOnTransferTokens(
+    function removeLiquidityMTRWithPermitSupportingFeeOnTransferTokens(
         address token,
         bool stable,
         uint liquidity,
@@ -248,7 +267,7 @@ interface IRouter {
         bytes32 s
     ) external returns (uint amountToken, uint amountFTM);
 
-    function removeLiquidityMATICSupportingFeeOnTransferTokens(
+    function removeLiquidityMTRSupportingFeeOnTransferTokens(
         address token,
         bool stable,
         uint liquidity,

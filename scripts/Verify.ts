@@ -1,9 +1,9 @@
 import hre from "hardhat";
 import axios from "axios";
-import {Logger} from "tslog";
+import { Logger } from "tslog";
 import logSettings from "../log_settings";
-import {Misc} from "./Misc";
-import {config as dotEnvConfig} from "dotenv";
+import { Misc } from "./Misc";
+import { config as dotEnvConfig } from "dotenv";
 
 const log: Logger = new Logger(logSettings);
 
@@ -21,9 +21,16 @@ export class Verify {
 
   public static async verify(address: string) {
     try {
-      await hre.run("verify:verify", {
+      await hre.run("sourcify", {
         address
       })
+    } catch (e) {
+      log.info('error verify ' + e);
+    }
+  }
+  public static async verifyAll() {
+    try {
+      await hre.run("sourcify")
     } catch (e) {
       log.info('error verify ' + e);
     }
