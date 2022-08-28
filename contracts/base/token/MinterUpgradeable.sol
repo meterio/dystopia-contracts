@@ -12,7 +12,7 @@ import "../../lib/AccessControl.sol";
 import "../../lib/Initializable.sol";
 
 contract MinterUpgradeable is AccessControl, Initializable {
-    uint256 internal constant _MONTH = 86400 * 7 * 4; // allows minting once per month
+    uint256 internal constant _WEEK = 86400 * 7; // allows minting once per month
     uint256 public veDistRatio;
     uint256 public constant VE_DIST_RATIO_MAX = 10000;
 
@@ -29,6 +29,10 @@ contract MinterUpgradeable is AccessControl, Initializable {
     uint public constant _START_BASE_WEEKLY_EMISSION = 20_000_000e18;
     uint public constant _TAIL_EMISSION = 1;
     uint public constant _TAIL_EMISSION_DENOMINATOR = 100;
+    /// @dev veDist per week
+    uint public veDistPerWeek;
+    /// @dev voter per week
+    uint public voterPerWeek;
 
     event Send(
         address indexed sender,
@@ -44,7 +48,7 @@ contract MinterUpgradeable is AccessControl, Initializable {
         _token = IERC20(IVe(__ve).token());
         _ve = IVe(__ve);
         controller = __controller;
-        activeperiod = (block.timestamp / _MONTH) * _MONTH;
+        activeperiod = (block.timestamp / _WEEK) * _WEEK;
         _setupRole(DEFAULT_ADMIN_ROLE, admin);
     }
 
@@ -53,8 +57,19 @@ contract MinterUpgradeable is AccessControl, Initializable {
         _;
     }
 
-    function adminSetVeRatio(uint256 _veDistRatio) public onlyAdmin {
-        veDistRatio = _veDistRatio;
+    function adminSetVeDistPerWeek(uint256 _veDistPerWeek) public onlyAdmin {
+        veDistPerWeek = _veDistPerWeek;
+    }
+
+    function adminSetVoterPerWeek(uint256 _voterPerWeek) public onlyAdmin {
+        voterPerWeek = _voterPerWeek;
+    }
+
+    function mint(address to, uint256 amount) public onlyAdmin {
+        (bool success, bytes memory data) = address(_token).call(
+            abi.encodeWithSelector(0x40c10f19, to, amount)
+        );
+        require(success && abi.decode(data, (bool)), "mint fail");
     }
 
     function _veDist() internal view returns (IVeDist) {
@@ -69,35 +84,30 @@ contract MinterUpgradeable is AccessControl, Initializable {
         activeperiod = _activeperiod;
     }
 
-    function mint(address to, uint256 amount) public onlyAdmin {
-        (bool success, bytes memory data) = address(_token).call(
-            abi.encodeWithSelector(0x40c10f19, to, amount)
-        );
-        require(success && abi.decode(data, (bool)), "mint fail");
-    }
-
     function updatePeriod() external onlyAdmin returns (uint256) {
         uint256 _period = activeperiod;
-        if (block.timestamp >= _period + _MONTH) {
-            _period = (block.timestamp / _MONTH) * _MONTH;
+        if (block.timestamp >= _period + _WEEK) {
+            _period = (block.timestamp / _WEEK) * _WEEK;
             activeperiod = _period;
 
             uint256 _balanceOf = _token.balanceOf(address(this));
-            uint256 veDistAmount = (_balanceOf * veDistRatio) /
-                VE_DIST_RATIO_MAX;
 
             require(
-                _token.transfer(address(_veDist()), veDistAmount),
+                _balanceOf >= veDistPerWeek + voterPerWeek,
+                "Insufficient balance"
+            );
+
+            require(
+                _token.transfer(address(_veDist()), veDistPerWeek),
                 "Transfer Fail"
             );
             _veDist().checkpointToken();
             _veDist().checkpointTotalSupply();
 
-            uint256 voterAmount = _balanceOf - veDistAmount;
-            _token.approve(address(_voter()), voterAmount);
-            _voter().notifyRewardAmount(voterAmount);
+            _token.approve(address(_voter()), voterPerWeek);
+            _voter().notifyRewardAmount(voterPerWeek);
 
-            emit Send(msg.sender, veDistRatio, veDistAmount);
+            emit Send(msg.sender, veDistPerWeek, voterPerWeek);
         }
         return _period;
     }

@@ -9,25 +9,29 @@ import "../../interface/IVoter.sol";
 import "../../interface/IVeDist.sol";
 import "../../interface/IController.sol";
 import "../../lib/AccessControl.sol";
-// 按周分配,voter/veDist分别用不同的两个变量控制分配数量
+
 contract Minter is AccessControl {
-    uint256 internal constant _MONTH = 86400 * 7 * 4; // allows minting once per month
+    uint256 internal constant _WEEK = 86400 * 7; // allows minting once per month
     uint256 public veDistRatio;
     uint256 public constant VE_DIST_RATIO_MAX = 10000;
 
-    IERC20 public immutable _token;
-    IVe public immutable _ve;
-    address public immutable controller;
+    IERC20 public _token;
+    IVe public _ve;
+    address public controller;
     uint256 public activeperiod;
     /// @dev 存根初始循环
     uint public initialStubCirculation;
-    uint internal constant _STUB_CIRCULATION = 10;
-    uint internal constant _STUB_CIRCULATION_DENOMINATOR = 100;
+    uint public constant _STUB_CIRCULATION = 10;
+    uint public constant _STUB_CIRCULATION_DENOMINATOR = 100;
     /// @dev 基础每周释放量 = 初始基础每周释放量
     uint public baseWeeklyEmission = _START_BASE_WEEKLY_EMISSION;
-    uint internal constant _START_BASE_WEEKLY_EMISSION = 20_000_000e18;
-    uint internal constant _TAIL_EMISSION = 1;
-    uint internal constant _TAIL_EMISSION_DENOMINATOR = 100;
+    uint public constant _START_BASE_WEEKLY_EMISSION = 20_000_000e18;
+    uint public constant _TAIL_EMISSION = 1;
+    uint public constant _TAIL_EMISSION_DENOMINATOR = 100;
+    /// @dev veDist per week
+    uint public veDistPerWeek;
+    /// @dev voter per week
+    uint public voterPerWeek;
 
     event Send(
         address indexed sender,
@@ -39,7 +43,7 @@ contract Minter is AccessControl {
         _token = IERC20(IVe(__ve).token());
         _ve = IVe(__ve);
         controller = __controller;
-        activeperiod = (block.timestamp / _MONTH) * _MONTH;
+        activeperiod = (block.timestamp / _WEEK) * _WEEK;
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
     }
 
@@ -48,8 +52,12 @@ contract Minter is AccessControl {
         _;
     }
 
-    function adminSetVeRatio(uint256 _veDistRatio) public onlyAdmin {
-        veDistRatio = _veDistRatio;
+    function adminSetVeDistPerWeek(uint256 _veDistPerWeek) public onlyAdmin {
+        veDistPerWeek = _veDistPerWeek;
+    }
+
+    function adminSetVoterPerWeek(uint256 _voterPerWeek) public onlyAdmin {
+        voterPerWeek = _voterPerWeek;
     }
 
     function mint(address to, uint256 amount) public onlyAdmin {
@@ -69,26 +77,28 @@ contract Minter is AccessControl {
 
     function updatePeriod() external onlyAdmin returns (uint256) {
         uint256 _period = activeperiod;
-        if (block.timestamp >= _period + _MONTH) {
-            _period = (block.timestamp / _MONTH) * _MONTH;
+        if (block.timestamp >= _period + _WEEK) {
+            _period = (block.timestamp / _WEEK) * _WEEK;
             activeperiod = _period;
 
             uint256 _balanceOf = _token.balanceOf(address(this));
-            uint256 veDistAmount = (_balanceOf * veDistRatio) /
-                VE_DIST_RATIO_MAX;
 
             require(
-                _token.transfer(address(_veDist()), veDistAmount),
+                _balanceOf >= veDistPerWeek + voterPerWeek,
+                "Insufficient balance"
+            );
+
+            require(
+                _token.transfer(address(_veDist()), veDistPerWeek),
                 "Transfer Fail"
             );
             _veDist().checkpointToken();
             _veDist().checkpointTotalSupply();
 
-            uint256 voterAmount = _balanceOf - veDistAmount;
-            _token.approve(address(_voter()), voterAmount);
-            _voter().notifyRewardAmount(voterAmount);
+            _token.approve(address(_voter()), voterPerWeek);
+            _voter().notifyRewardAmount(voterPerWeek);
 
-            emit Send(msg.sender, veDistRatio, veDistAmount);
+            emit Send(msg.sender, veDistPerWeek, voterPerWeek);
         }
         return _period;
     }
