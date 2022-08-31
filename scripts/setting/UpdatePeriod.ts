@@ -1,9 +1,6 @@
 import { ethers } from "hardhat";
 import { Misc } from "../Misc";
 import { MinterUpgradeable, VoltVoter } from "../../typechain";
-import { parseUnits } from "ethers/lib/utils";
-
-const amount = parseUnits('100000');
 
 async function main() {
   const [deployer, admin] = await ethers.getSigners();
@@ -14,11 +11,7 @@ async function main() {
 
     let minter = await ethers.getContractAt("MinterUpgradeable", minterjson.address, admin) as MinterUpgradeable;
 
-    let receipt = await minter.mint(minterjson.address,amount);
-    console.info(`mint:`, receipt.hash);
-    // receipt = await minter.setActiveperiod(0);
-    // console.info(`setActiveperiod:`, receipt.hash);
-    receipt = await minter.updatePeriod();
+    let receipt = await minter.updatePeriod();
     console.info(`updatePeriod:`, receipt.hash);
 
     const voter = await ethers.getContractAt("VoltVoter",voterJson.address, admin) as VoltVoter;
