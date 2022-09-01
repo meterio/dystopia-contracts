@@ -53,6 +53,7 @@ interface MinterUpgradeableInterface extends ethers.utils.Interface {
     "veDistRatio()": FunctionFragment;
     "voterPerWeek()": FunctionFragment;
     "weeklyEmission()": FunctionFragment;
+    "withdraw(uint256)": FunctionFragment;
   };
 
   encodeFunctionData(
@@ -177,6 +178,10 @@ interface MinterUpgradeableInterface extends ethers.utils.Interface {
     functionFragment: "weeklyEmission",
     values?: undefined
   ): string;
+  encodeFunctionData(
+    functionFragment: "withdraw",
+    values: [BigNumberish]
+  ): string;
 
   decodeFunctionResult(
     functionFragment: "DEFAULT_ADMIN_ROLE",
@@ -282,6 +287,7 @@ interface MinterUpgradeableInterface extends ethers.utils.Interface {
     functionFragment: "weeklyEmission",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "withdraw", data: BytesLike): Result;
 
   events: {
     "RoleGranted(bytes32,address,address)": EventFragment;
@@ -468,6 +474,11 @@ export class MinterUpgradeable extends BaseContract {
     voterPerWeek(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     weeklyEmission(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    withdraw(
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
   };
 
   DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<string>;
@@ -581,6 +592,11 @@ export class MinterUpgradeable extends BaseContract {
 
   weeklyEmission(overrides?: CallOverrides): Promise<BigNumber>;
 
+  withdraw(
+    amount: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   callStatic: {
     DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<string>;
 
@@ -692,6 +708,8 @@ export class MinterUpgradeable extends BaseContract {
     voterPerWeek(overrides?: CallOverrides): Promise<BigNumber>;
 
     weeklyEmission(overrides?: CallOverrides): Promise<BigNumber>;
+
+    withdraw(amount: BigNumberish, overrides?: CallOverrides): Promise<void>;
   };
 
   filters: {
@@ -866,6 +884,11 @@ export class MinterUpgradeable extends BaseContract {
     voterPerWeek(overrides?: CallOverrides): Promise<BigNumber>;
 
     weeklyEmission(overrides?: CallOverrides): Promise<BigNumber>;
+
+    withdraw(
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
   };
 
   populateTransaction: {
@@ -994,5 +1017,10 @@ export class MinterUpgradeable extends BaseContract {
     voterPerWeek(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     weeklyEmission(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    withdraw(
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
   };
 }

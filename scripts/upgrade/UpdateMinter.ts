@@ -16,11 +16,12 @@ async function main() {
     let receipt = await minterProxy.upgradeTo(
       minterImpl.address,
     );
+    console.log("upgradeTo:",receipt.hash);
 
-    let minter = await ethers.getContractAt("MinterUpgradeable", minterProxy.address, admin) as MinterUpgradeable;
+    // let minter = await ethers.getContractAt("MinterUpgradeable", minterProxy.address, admin) as MinterUpgradeable;
 
-    receipt = await minter.setActiveperiod(0);
-    console.info(`setActiveperiod:`, receipt.hash);
+    // receipt = await minter.setActiveperiod(0);
+    // console.info(`setActiveperiod:`, receipt.hash);
 
     const data = ''
       + 'update to: ' + minterImpl.address + '\n'

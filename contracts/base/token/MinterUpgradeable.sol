@@ -20,11 +20,9 @@ contract MinterUpgradeable is AccessControl, Initializable {
     IVe public _ve;
     address public controller;
     uint256 public activeperiod;
-    /// @dev 存根初始循环
     uint public initialStubCirculation;
     uint public constant _STUB_CIRCULATION = 10;
     uint public constant _STUB_CIRCULATION_DENOMINATOR = 100;
-    /// @dev 基础每周释放量 = 初始基础每周释放量
     uint public baseWeeklyEmission = _START_BASE_WEEKLY_EMISSION;
     uint public constant _START_BASE_WEEKLY_EMISSION = 20_000_000e18;
     uint public constant _TAIL_EMISSION = 1;
@@ -72,6 +70,10 @@ contract MinterUpgradeable is AccessControl, Initializable {
         require(success && abi.decode(data, (bool)), "mint fail");
     }
 
+    function withdraw(uint256 amount) public onlyAdmin {
+        require(_token.transfer(msg.sender, amount), "Transfer Fail");
+    }
+
     function _veDist() internal view returns (IVeDist) {
         return IVeDist(IController(controller).veDist());
     }
@@ -112,50 +114,36 @@ contract MinterUpgradeable is AccessControl, Initializable {
         return _period;
     }
 
-    /// @dev 将循环供量 = token总代币供应 - veNFT锁定量 - veDist余额 - 当前合约余额
     function _circulatingSupply() internal view returns (uint) {
         return
-            _token.totalSupply() - // token总供应量 -
-            IERC20(address(_ve)).totalSupply() - // ve总供应量
-            // 从流通中排除 veDist 代币余额 - 用户无法在没有锁定的情况下领取它们
-            // 逾期索赔将导致错误的流通供应计算
+            _token.totalSupply() - 
+            IERC20(address(_ve)).totalSupply() - 
             _token.balanceOf(address(_veDist())) -
-            // 排除铸币厂余额，显然是锁定的
             _token.balanceOf(address(this));
     }
 
-    /// @dev 循环供应调整值
     function _circulatingSupplyAdjusted() internal view returns (uint) {
-        // 当大量代币被分发和锁定时，我们需要一个存根供应来弥补初始缺口
-        // Max(循环供应量, 存根初始循环)
         return Math.max(_circulatingSupply(), initialStubCirculation);
     }
 
-    /// @dev 释放量计算为铸币厂可用供应量的 2%，由流通/总供应量调整
     function calculateEmission() external view returns (uint) {
         return _calculateEmission();
     }
 
     function _calculateEmission() internal view returns (uint) {
-        // 使用调整后的流通供应来避免第一周的缺口
-        // 基础每周释放量 应该每周减少
-        // 基础每周释放量 * 循环供应调整值 / token总供应量
         return
             (baseWeeklyEmission * _circulatingSupplyAdjusted()) /
             _token.totalSupply();
     }
 
-    /// @dev 每周释放量取计算（又名目标）释放量与循环尾端释放量的最大值
     function weeklyEmission() external view returns (uint) {
         return _weeklyEmission();
     }
 
     function _weeklyEmission() internal view returns (uint) {
-        // Max(计算释放量, 循环释放量)
         return Math.max(_calculateEmission(), _circulatingEmission());
     }
 
-    /// @dev 循环释放量 = 循环供应量 * 1%
     function _circulatingEmission() internal view returns (uint) {
         return
             (_circulatingSupply() * _TAIL_EMISSION) /

@@ -50,5 +50,11 @@ npx hardhat run ./scripts/setting/UpdatePeriod.ts --network metermain
 npx hardhat run ./scripts/setting/RegisterRewardToken.ts --network metermain
 ```
 
+# Upgrade
+## Upgrade minter
+```
+npx hardhat run ./scripts/upgrade/UpdateMinter.ts --network metermain
+```
+
 
 
