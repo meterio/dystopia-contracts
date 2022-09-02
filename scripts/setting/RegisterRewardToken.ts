@@ -1,12 +1,16 @@
 import { ethers } from "hardhat";
 import { Misc } from "../Misc";
 import { VoltFactory, VoltVoter, Ve, Gauge, Bribe } from "../../typechain";
+import { readFileSync } from "fs";
 
 const TokenId = "1";
-const MTRG_TOKEN = "0x8a419ef4941355476cf04933e90bf3bbf2f73814".toLowerCase();
 
 async function main() {
   const [deployer, admin] = await ethers.getSigners();
+  const chainId = await deployer.getChainId();
+  const path = `../../Addresses/${chainId}/`;
+  const file = 'MTRG.json';
+  const MTRG_TOKEN = JSON.parse(readFileSync(path + file).toString());
   const factoryJson = Misc.getContract(await deployer.getChainId(), "Factory");
   const voterJson = Misc.getContract(await deployer.getChainId(), "Voter");
 
@@ -30,8 +34,8 @@ async function main() {
       console.info(`gauge_${i}:`, gauge);
       if (gauge != ethers.constants.AddressZero) {
         let gaugeContract = await ethers.getContractAt("Gauge", gauge, admin) as Gauge;
-        if (await gaugeContract.isRewardToken(MTRG_TOKEN) == false) {
-          let receipt = await voter.registerRewardToken(MTRG_TOKEN, gauge, TokenId);
+        if (await gaugeContract.isRewardToken(MTRG_TOKEN.address) == false) {
+          let receipt = await voter.registerRewardToken(MTRG_TOKEN.address, gauge, TokenId);
           console.info(`gauge_${i} register reward token:`, receipt.hash);
         }
       }
@@ -40,8 +44,8 @@ async function main() {
       console.info(`bribe_${i}:`, bribe);
       if (gauge != ethers.constants.AddressZero) {
         let bribeContract = await ethers.getContractAt("Bribe", bribe, admin) as Bribe;
-        if (await bribeContract.isRewardToken(MTRG_TOKEN) == false) {
-          let receipt = await voter.registerRewardToken(MTRG_TOKEN, bribe, TokenId);
+        if (await bribeContract.isRewardToken(MTRG_TOKEN.address) == false) {
+          let receipt = await voter.registerRewardToken(MTRG_TOKEN.address, bribe, TokenId);
           console.info(`gauge_${i} register reward token:`, receipt.hash);
         }
       }

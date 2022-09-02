@@ -13,26 +13,21 @@ import {
 } from "../../../typechain";
 import { Verify } from "../../Verify";
 import { parseUnits } from "ethers/lib/utils";
+import { readFileSync } from "fs";
 
-const WMTR_TOKEN = "0xfAC315d105E5A7fe2174B3EB1f95C257A9A5e271".toLowerCase();
-const USDT_TOKEN = "0xda5f90e416a22f6f65ed586a859c8666ce6ce1d1".toLowerCase();
-const USDC_TOKEN = "0x8ae4c669f147737085a23d578c1da94d3e39879f".toLowerCase();
-const MTRG_TOKEN = "0x8a419ef4941355476cf04933e90bf3bbf2f73814".toLowerCase();
-const ETH_TOKEN = "0xe8876830e7cc85dae8ce31b0802313caf856886f".toLowerCase();
-const WBTC_TOKEN = "0xcfd9102a2675e0d898982f1fd1dd0264aaa901da".toLowerCase();
-const SUUSD_TOKEN = "0x37d982D96AC985a4Fa9522383De5010109F0627C".toLowerCase();
-const SUETH_TOKEN = "0x4b0D849E5BF7f62bcBb0B7C364DDDA552c2c3a8a".toLowerCase();
-const SUBTC_TOKEN = "0x0477763b021E0f30680b7266a264d1044FE77A4d".toLowerCase();
-const SUMER_TOKEN = "0xF67C5F20B95b7604EBB65A53E50ebd38300da8EE".toLowerCase();
 
 const VeDistPerWeek = parseUnits('30000');
 const VoterPerWeek = parseUnits('70000');
 
 async function main() {
   const [deployer, admin] = await ethers.getSigners();
+  const chainId = await deployer.getChainId();
+  const path = `../../Addresses/${chainId}/`;
+  const file = 'Tokens.json';
+  const TokenJson = JSON.parse(readFileSync(path + file).toString());
 
-  const factoryJson = Misc.getContract(await deployer.getChainId(), "Factory");
-  const tokenJson = Misc.getContract(await deployer.getChainId(), "Volt");
+  const factoryJson = Misc.getContract(chainId, "Factory");
+  const tokenJson = Misc.getContract(chainId, "Volt");
 
   if (factoryJson.address != ethers.constants.AddressZero &&
     tokenJson.address != ethers.constants.AddressZero) {
@@ -116,19 +111,8 @@ async function main() {
     receipt = await minter.adminSetVoterPerWeek(VoterPerWeek);
     console.info(`adminSetVoterPerWeek:`, receipt.hash);
 
-    const voterTokens = [
-      ETH_TOKEN,
-      MTRG_TOKEN,
-      SUBTC_TOKEN,
-      SUETH_TOKEN,
-      SUMER_TOKEN,
-      SUUSD_TOKEN,
-      USDC_TOKEN,
-      USDT_TOKEN,
-      WBTC_TOKEN,
-      WMTR_TOKEN,
-      tokenJson.address
-    ]
+    const voterTokens = TokenJson.push(tokenJson.address);
+
     const voter = await ethers.getContractAt("VoltVoterUpgradeable", voterProxy.address, admin) as VoltVoterUpgradeable;
     receipt = await voter.init(voterTokens, minterProxy.address);
     console.log('init:', receipt.hash);
