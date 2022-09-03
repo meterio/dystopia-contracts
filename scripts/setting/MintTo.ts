@@ -16,8 +16,8 @@ async function main() {
 
     let receipt = await minter.mint(minterjson.address,amount);
     console.info(`mint:`, receipt.hash);
-    // receipt = await minter.setActiveperiod(0);
-    // console.info(`setActiveperiod:`, receipt.hash);
+    receipt = await minter.setActiveperiod(0);
+    console.info(`setActiveperiod:`, receipt.hash);
     receipt = await minter.updatePeriod();
     console.info(`updatePeriod:`, receipt.hash);
 

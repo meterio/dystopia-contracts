@@ -24,6 +24,7 @@ interface VeDistUpgradeableInterface extends ethers.utils.Interface {
     "WEEK()": FunctionFragment;
     "adjustToDistribute(uint256,uint256,uint256,uint256)": FunctionFragment;
     "adjustVeSupply(uint256,uint256,int128,int128)": FunctionFragment;
+    "calculateClaim(uint256,uint256)": FunctionFragment;
     "checkpointToken()": FunctionFragment;
     "checkpointTotalSupply()": FunctionFragment;
     "claim(uint256)": FunctionFragment;
@@ -55,6 +56,10 @@ interface VeDistUpgradeableInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "adjustVeSupply",
     values: [BigNumberish, BigNumberish, BigNumberish, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "calculateClaim",
+    values: [BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "checkpointToken",
@@ -133,6 +138,10 @@ interface VeDistUpgradeableInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "adjustVeSupply",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "calculateClaim",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -271,6 +280,22 @@ export class VeDistUpgradeable extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
+    calculateClaim(
+      _tokenId: BigNumberish,
+      _lastTokenTime: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<
+      [
+        [BigNumber, BigNumber, BigNumber, BigNumber, boolean] & {
+          toDistribute: BigNumber;
+          userEpoch: BigNumber;
+          weekCursor: BigNumber;
+          maxUserEpoch: BigNumber;
+          success: boolean;
+        }
+      ]
+    >;
+
     checkpointToken(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -374,6 +399,20 @@ export class VeDistUpgradeable extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
+  calculateClaim(
+    _tokenId: BigNumberish,
+    _lastTokenTime: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<
+    [BigNumber, BigNumber, BigNumber, BigNumber, boolean] & {
+      toDistribute: BigNumber;
+      userEpoch: BigNumber;
+      weekCursor: BigNumber;
+      maxUserEpoch: BigNumber;
+      success: boolean;
+    }
+  >;
+
   checkpointToken(
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -473,6 +512,20 @@ export class VeDistUpgradeable extends BaseContract {
       ptSlope: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    calculateClaim(
+      _tokenId: BigNumberish,
+      _lastTokenTime: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<
+      [BigNumber, BigNumber, BigNumber, BigNumber, boolean] & {
+        toDistribute: BigNumber;
+        userEpoch: BigNumber;
+        weekCursor: BigNumber;
+        maxUserEpoch: BigNumber;
+        success: boolean;
+      }
+    >;
 
     checkpointToken(overrides?: CallOverrides): Promise<void>;
 
@@ -616,6 +669,12 @@ export class VeDistUpgradeable extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    calculateClaim(
+      _tokenId: BigNumberish,
+      _lastTokenTime: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     checkpointToken(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -714,6 +773,12 @@ export class VeDistUpgradeable extends BaseContract {
       ptTs: BigNumberish,
       ptBias: BigNumberish,
       ptSlope: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    calculateClaim(
+      _tokenId: BigNumberish,
+      _lastTokenTime: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

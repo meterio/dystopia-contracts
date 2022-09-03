@@ -271,6 +271,14 @@ contract VeDistUpgradeable is IVeDist, Initializable {
         return result.toDistribute;
     }
 
+    function calculateClaim(uint _tokenId, uint _lastTokenTime)
+        public
+        view
+        returns (ClaimCalculationResult memory)
+    {
+        return _calculateClaim(_tokenId, votingEscrow, _lastTokenTime);
+    }
+
     function _calculateClaim(
         uint _tokenId,
         address ve,
