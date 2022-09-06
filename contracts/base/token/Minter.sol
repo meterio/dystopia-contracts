@@ -12,20 +12,11 @@ import "../../lib/AccessControl.sol";
 
 contract Minter is AccessControl {
     uint256 internal constant _WEEK = 86400 * 7; // allows minting once per month
-    uint256 public veDistRatio;
-    uint256 public constant VE_DIST_RATIO_MAX = 10000;
 
     IERC20 public _token;
     IVe public _ve;
     address public controller;
     uint256 public activeperiod;
-    uint public initialStubCirculation;
-    uint public constant _STUB_CIRCULATION = 10;
-    uint public constant _STUB_CIRCULATION_DENOMINATOR = 100;
-    uint public baseWeeklyEmission = _START_BASE_WEEKLY_EMISSION;
-    uint public constant _START_BASE_WEEKLY_EMISSION = 20_000_000e18;
-    uint public constant _TAIL_EMISSION = 1;
-    uint public constant _TAIL_EMISSION_DENOMINATOR = 100;
     /// @dev veDist per week
     uint public veDistPerWeek;
     /// @dev voter per week
@@ -105,39 +96,7 @@ contract Minter is AccessControl {
         return _period;
     }
 
-    function _circulatingSupply() internal view returns (uint) {
-        return
-            _token.totalSupply() - 
-            IERC20(address(_ve)).totalSupply() - 
-            _token.balanceOf(address(_veDist())) -
-            _token.balanceOf(address(this));
-    }
-
-    function _circulatingSupplyAdjusted() internal view returns (uint) {
-        return Math.max(_circulatingSupply(), initialStubCirculation);
-    }
-
-    function calculateEmission() external view returns (uint) {
-        return _calculateEmission();
-    }
-
-    function _calculateEmission() internal view returns (uint) {
-        return
-            (baseWeeklyEmission * _circulatingSupplyAdjusted()) /
-            _token.totalSupply();
-    }
-
     function weeklyEmission() external view returns (uint) {
-        return _weeklyEmission();
-    }
-
-    function _weeklyEmission() internal view returns (uint) {
-        return Math.max(_calculateEmission(), _circulatingEmission());
-    }
-
-    function _circulatingEmission() internal view returns (uint) {
-        return
-            (_circulatingSupply() * _TAIL_EMISSION) /
-            _TAIL_EMISSION_DENOMINATOR;
+        return veDistPerWeek + voterPerWeek;
     }
 }

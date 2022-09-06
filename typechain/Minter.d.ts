@@ -22,19 +22,11 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 interface MinterInterface extends ethers.utils.Interface {
   functions: {
     "DEFAULT_ADMIN_ROLE()": FunctionFragment;
-    "VE_DIST_RATIO_MAX()": FunctionFragment;
-    "_START_BASE_WEEKLY_EMISSION()": FunctionFragment;
-    "_STUB_CIRCULATION()": FunctionFragment;
-    "_STUB_CIRCULATION_DENOMINATOR()": FunctionFragment;
-    "_TAIL_EMISSION()": FunctionFragment;
-    "_TAIL_EMISSION_DENOMINATOR()": FunctionFragment;
     "_token()": FunctionFragment;
     "_ve()": FunctionFragment;
     "activeperiod()": FunctionFragment;
     "adminSetVeDistPerWeek(uint256)": FunctionFragment;
     "adminSetVoterPerWeek(uint256)": FunctionFragment;
-    "baseWeeklyEmission()": FunctionFragment;
-    "calculateEmission()": FunctionFragment;
     "controller()": FunctionFragment;
     "getRoleAdmin(bytes32)": FunctionFragment;
     "getRoleMember(bytes32,uint256)": FunctionFragment;
@@ -42,13 +34,11 @@ interface MinterInterface extends ethers.utils.Interface {
     "getRoleMemberIndex(bytes32,address)": FunctionFragment;
     "grantRole(bytes32,address)": FunctionFragment;
     "hasRole(bytes32,address)": FunctionFragment;
-    "initialStubCirculation()": FunctionFragment;
     "mint(address,uint256)": FunctionFragment;
     "renounceRole(bytes32,address)": FunctionFragment;
     "revokeRole(bytes32,address)": FunctionFragment;
     "updatePeriod()": FunctionFragment;
     "veDistPerWeek()": FunctionFragment;
-    "veDistRatio()": FunctionFragment;
     "voterPerWeek()": FunctionFragment;
     "weeklyEmission()": FunctionFragment;
     "withdraw(uint256)": FunctionFragment;
@@ -56,30 +46,6 @@ interface MinterInterface extends ethers.utils.Interface {
 
   encodeFunctionData(
     functionFragment: "DEFAULT_ADMIN_ROLE",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "VE_DIST_RATIO_MAX",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "_START_BASE_WEEKLY_EMISSION",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "_STUB_CIRCULATION",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "_STUB_CIRCULATION_DENOMINATOR",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "_TAIL_EMISSION",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "_TAIL_EMISSION_DENOMINATOR",
     values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "_token", values?: undefined): string;
@@ -95,14 +61,6 @@ interface MinterInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "adminSetVoterPerWeek",
     values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "baseWeeklyEmission",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "calculateEmission",
-    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "controller",
@@ -133,10 +91,6 @@ interface MinterInterface extends ethers.utils.Interface {
     values: [BytesLike, string]
   ): string;
   encodeFunctionData(
-    functionFragment: "initialStubCirculation",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
     functionFragment: "mint",
     values: [string, BigNumberish]
   ): string;
@@ -157,10 +111,6 @@ interface MinterInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "veDistRatio",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
     functionFragment: "voterPerWeek",
     values?: undefined
   ): string;
@@ -177,30 +127,6 @@ interface MinterInterface extends ethers.utils.Interface {
     functionFragment: "DEFAULT_ADMIN_ROLE",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "VE_DIST_RATIO_MAX",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "_START_BASE_WEEKLY_EMISSION",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "_STUB_CIRCULATION",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "_STUB_CIRCULATION_DENOMINATOR",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "_TAIL_EMISSION",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "_TAIL_EMISSION_DENOMINATOR",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "_token", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "_ve", data: BytesLike): Result;
   decodeFunctionResult(
@@ -213,14 +139,6 @@ interface MinterInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "adminSetVoterPerWeek",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "baseWeeklyEmission",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "calculateEmission",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "controller", data: BytesLike): Result;
@@ -242,10 +160,6 @@ interface MinterInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "grantRole", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "hasRole", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "initialStubCirculation",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "renounceRole",
@@ -258,10 +172,6 @@ interface MinterInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "veDistPerWeek",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "veDistRatio",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -347,22 +257,6 @@ export class Minter extends BaseContract {
   functions: {
     DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<[string]>;
 
-    VE_DIST_RATIO_MAX(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    _START_BASE_WEEKLY_EMISSION(
-      overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
-
-    _STUB_CIRCULATION(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    _STUB_CIRCULATION_DENOMINATOR(
-      overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
-
-    _TAIL_EMISSION(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    _TAIL_EMISSION_DENOMINATOR(overrides?: CallOverrides): Promise<[BigNumber]>;
-
     _token(overrides?: CallOverrides): Promise<[string]>;
 
     _ve(overrides?: CallOverrides): Promise<[string]>;
@@ -378,10 +272,6 @@ export class Minter extends BaseContract {
       _voterPerWeek: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
-
-    baseWeeklyEmission(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    calculateEmission(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     controller(overrides?: CallOverrides): Promise<[string]>;
 
@@ -416,8 +306,6 @@ export class Minter extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
-    initialStubCirculation(overrides?: CallOverrides): Promise<[BigNumber]>;
-
     mint(
       to: string,
       amount: BigNumberish,
@@ -442,8 +330,6 @@ export class Minter extends BaseContract {
 
     veDistPerWeek(overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    veDistRatio(overrides?: CallOverrides): Promise<[BigNumber]>;
-
     voterPerWeek(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     weeklyEmission(overrides?: CallOverrides): Promise<[BigNumber]>;
@@ -455,18 +341,6 @@ export class Minter extends BaseContract {
   };
 
   DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<string>;
-
-  VE_DIST_RATIO_MAX(overrides?: CallOverrides): Promise<BigNumber>;
-
-  _START_BASE_WEEKLY_EMISSION(overrides?: CallOverrides): Promise<BigNumber>;
-
-  _STUB_CIRCULATION(overrides?: CallOverrides): Promise<BigNumber>;
-
-  _STUB_CIRCULATION_DENOMINATOR(overrides?: CallOverrides): Promise<BigNumber>;
-
-  _TAIL_EMISSION(overrides?: CallOverrides): Promise<BigNumber>;
-
-  _TAIL_EMISSION_DENOMINATOR(overrides?: CallOverrides): Promise<BigNumber>;
 
   _token(overrides?: CallOverrides): Promise<string>;
 
@@ -483,10 +357,6 @@ export class Minter extends BaseContract {
     _voterPerWeek: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
-
-  baseWeeklyEmission(overrides?: CallOverrides): Promise<BigNumber>;
-
-  calculateEmission(overrides?: CallOverrides): Promise<BigNumber>;
 
   controller(overrides?: CallOverrides): Promise<string>;
 
@@ -521,8 +391,6 @@ export class Minter extends BaseContract {
     overrides?: CallOverrides
   ): Promise<boolean>;
 
-  initialStubCirculation(overrides?: CallOverrides): Promise<BigNumber>;
-
   mint(
     to: string,
     amount: BigNumberish,
@@ -547,8 +415,6 @@ export class Minter extends BaseContract {
 
   veDistPerWeek(overrides?: CallOverrides): Promise<BigNumber>;
 
-  veDistRatio(overrides?: CallOverrides): Promise<BigNumber>;
-
   voterPerWeek(overrides?: CallOverrides): Promise<BigNumber>;
 
   weeklyEmission(overrides?: CallOverrides): Promise<BigNumber>;
@@ -560,20 +426,6 @@ export class Minter extends BaseContract {
 
   callStatic: {
     DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<string>;
-
-    VE_DIST_RATIO_MAX(overrides?: CallOverrides): Promise<BigNumber>;
-
-    _START_BASE_WEEKLY_EMISSION(overrides?: CallOverrides): Promise<BigNumber>;
-
-    _STUB_CIRCULATION(overrides?: CallOverrides): Promise<BigNumber>;
-
-    _STUB_CIRCULATION_DENOMINATOR(
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    _TAIL_EMISSION(overrides?: CallOverrides): Promise<BigNumber>;
-
-    _TAIL_EMISSION_DENOMINATOR(overrides?: CallOverrides): Promise<BigNumber>;
 
     _token(overrides?: CallOverrides): Promise<string>;
 
@@ -590,10 +442,6 @@ export class Minter extends BaseContract {
       _voterPerWeek: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
-
-    baseWeeklyEmission(overrides?: CallOverrides): Promise<BigNumber>;
-
-    calculateEmission(overrides?: CallOverrides): Promise<BigNumber>;
 
     controller(overrides?: CallOverrides): Promise<string>;
 
@@ -628,8 +476,6 @@ export class Minter extends BaseContract {
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    initialStubCirculation(overrides?: CallOverrides): Promise<BigNumber>;
-
     mint(
       to: string,
       amount: BigNumberish,
@@ -651,8 +497,6 @@ export class Minter extends BaseContract {
     updatePeriod(overrides?: CallOverrides): Promise<BigNumber>;
 
     veDistPerWeek(overrides?: CallOverrides): Promise<BigNumber>;
-
-    veDistRatio(overrides?: CallOverrides): Promise<BigNumber>;
 
     voterPerWeek(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -720,20 +564,6 @@ export class Minter extends BaseContract {
   estimateGas: {
     DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
 
-    VE_DIST_RATIO_MAX(overrides?: CallOverrides): Promise<BigNumber>;
-
-    _START_BASE_WEEKLY_EMISSION(overrides?: CallOverrides): Promise<BigNumber>;
-
-    _STUB_CIRCULATION(overrides?: CallOverrides): Promise<BigNumber>;
-
-    _STUB_CIRCULATION_DENOMINATOR(
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    _TAIL_EMISSION(overrides?: CallOverrides): Promise<BigNumber>;
-
-    _TAIL_EMISSION_DENOMINATOR(overrides?: CallOverrides): Promise<BigNumber>;
-
     _token(overrides?: CallOverrides): Promise<BigNumber>;
 
     _ve(overrides?: CallOverrides): Promise<BigNumber>;
@@ -749,10 +579,6 @@ export class Minter extends BaseContract {
       _voterPerWeek: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
-
-    baseWeeklyEmission(overrides?: CallOverrides): Promise<BigNumber>;
-
-    calculateEmission(overrides?: CallOverrides): Promise<BigNumber>;
 
     controller(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -790,8 +616,6 @@ export class Minter extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    initialStubCirculation(overrides?: CallOverrides): Promise<BigNumber>;
-
     mint(
       to: string,
       amount: BigNumberish,
@@ -816,8 +640,6 @@ export class Minter extends BaseContract {
 
     veDistPerWeek(overrides?: CallOverrides): Promise<BigNumber>;
 
-    veDistRatio(overrides?: CallOverrides): Promise<BigNumber>;
-
     voterPerWeek(overrides?: CallOverrides): Promise<BigNumber>;
 
     weeklyEmission(overrides?: CallOverrides): Promise<BigNumber>;
@@ -830,24 +652,6 @@ export class Minter extends BaseContract {
 
   populateTransaction: {
     DEFAULT_ADMIN_ROLE(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    VE_DIST_RATIO_MAX(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    _START_BASE_WEEKLY_EMISSION(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    _STUB_CIRCULATION(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    _STUB_CIRCULATION_DENOMINATOR(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    _TAIL_EMISSION(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    _TAIL_EMISSION_DENOMINATOR(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -866,12 +670,6 @@ export class Minter extends BaseContract {
       _voterPerWeek: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
-
-    baseWeeklyEmission(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    calculateEmission(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     controller(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -909,10 +707,6 @@ export class Minter extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    initialStubCirculation(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
     mint(
       to: string,
       amount: BigNumberish,
@@ -936,8 +730,6 @@ export class Minter extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     veDistPerWeek(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    veDistRatio(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     voterPerWeek(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
