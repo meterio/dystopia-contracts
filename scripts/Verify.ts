@@ -19,9 +19,17 @@ const argv = require('yargs/yargs')()
 
 export class Verify {
 
+  public static async sourcify() {
+    try {
+      await hre.run("sourcify")
+    } catch (e) {
+      log.info('error verify ' + e);
+    }
+  }
+
   public static async verify(address: string) {
     try {
-      await hre.run("sourcify", {
+      await hre.run("verify:verify", {
         address
       })
     } catch (e) {

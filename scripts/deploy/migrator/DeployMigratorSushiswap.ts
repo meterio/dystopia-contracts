@@ -19,7 +19,6 @@ async function main() {
   writeFileSync('tmp/migrator.txt', data);
 
   await Misc.wait(5);
-
   await Verify.verifyWithArgs(migrator.address, [oldUniswapFactory, dystRouter]);
 
 }

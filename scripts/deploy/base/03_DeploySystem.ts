@@ -22,7 +22,7 @@ const VoterPerWeek = parseUnits('70000');
 async function main() {
   const [deployer, admin] = await ethers.getSigners();
   const chainId = await deployer.getChainId();
-  const path = `../../Addresses/${chainId}/`;
+  const path = `./scripts/Addresses/${chainId}/`;
   const file = 'Tokens.json';
   const TokenJson = JSON.parse(readFileSync(path + file).toString());
 
@@ -33,51 +33,39 @@ async function main() {
     tokenJson.address != ethers.constants.AddressZero) {
 
     const controllerImpl = await Deploy.deployContract(deployer, 'ControllerUpgradeable') as ControllerUpgradeable;
-    await Verify.verify(controllerImpl.address);
     const controllerProxy = await Deploy.deployContract(deployer, "TransparentUpgradeableProxy",
       controllerImpl.address,
       deployer.address,
       controllerImpl.interface.encodeFunctionData("initialize", [admin.address])
     );
-    await Verify.verify(controllerProxy.address);
     const veImpl = await Deploy.deployContract(deployer, "VeUpgradeable") as VeUpgradeable;
-    await Verify.verify(veImpl.address);
     const veProxy = await Deploy.deployContract(deployer, "TransparentUpgradeableProxy",
       veImpl.address,
       deployer.address,
       veImpl.interface.encodeFunctionData("initialize", [tokenJson.address, controllerProxy.address])
     );
-    await Verify.verify(veProxy.address);
     const gaugesFactory = await Deploy.deployGaugeFactory(deployer);
-    await Verify.verify(gaugesFactory.address);
     const bribesFactory = await Deploy.deployBribeFactory(deployer);
-    await Verify.verify(bribesFactory.address);
 
     const veDistImpl = await Deploy.deployContract(deployer, "VeDistUpgradeable") as VeDistUpgradeable;
-    await Verify.verify(veDistImpl.address);
     const veDistProxy = await Deploy.deployContract(deployer, "TransparentUpgradeableProxy",
       veDistImpl.address,
       deployer.address,
       veDistImpl.interface.encodeFunctionData("initialize", [veProxy.address, admin.address])
     ) as VeDistUpgradeable;
-    await Verify.verify(veDistProxy.address);
     const voterImpl = await Deploy.deployContract(deployer, "VoltVoterUpgradeable") as VoltVoterUpgradeable;
-    await Verify.verify(voterImpl.address);
     const voterProxy = await Deploy.deployContract(deployer, "TransparentUpgradeableProxy",
       voterImpl.address,
       deployer.address,
       voterImpl.interface.encodeFunctionData("initialize", [veProxy.address, factoryJson.address, gaugesFactory.address, bribesFactory.address, admin.address])
     );
-    await Verify.verify(voterProxy.address);
 
     const minterImpl = await Deploy.deployContract(deployer, "MinterUpgradeable") as MinterUpgradeable;
-    await Verify.verify(minterImpl.address);
     const minterProxy = await Deploy.deployContract(deployer, "TransparentUpgradeableProxy",
       minterImpl.address,
       deployer.address,
       minterImpl.interface.encodeFunctionData("initialize", [veProxy.address, controllerProxy.address, admin.address])
     ) as MinterUpgradeable;
-    await Verify.verify(minterProxy.address);
 
 
     const data = ''
@@ -111,10 +99,10 @@ async function main() {
     receipt = await minter.adminSetVoterPerWeek(VoterPerWeek);
     console.info(`adminSetVoterPerWeek:`, receipt.hash);
 
-    const voterTokens = TokenJson.push(tokenJson.address);
+    TokenJson.push(tokenJson.address);
 
     const voter = await ethers.getContractAt("VoltVoterUpgradeable", voterProxy.address, admin) as VoltVoterUpgradeable;
-    receipt = await voter.init(voterTokens, minterProxy.address);
+    receipt = await voter.init(TokenJson, minterProxy.address);
     console.log('init:', receipt.hash);
 
     console.log(data);
@@ -132,6 +120,7 @@ async function main() {
     Misc.saveFile(await deployer.getChainId(), "Minter", minterProxy.address);
 
     await Misc.wait(5);
+    await Verify.sourcify();
   } else {
     console.log("No factory address")
   }

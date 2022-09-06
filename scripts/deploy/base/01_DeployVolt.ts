@@ -12,11 +12,9 @@ async function main() {
     + 'Volt Token: ' + token.address + '\n'
 
   console.log(data);
-  Misc.saveFile(await signer.getChainId(),"Volt",token.address)
-
+  Misc.saveFile(await signer.getChainId(), "Volt", token.address)
   await Misc.wait(5);
-
-  await Verify.verify(token.address);
+  await Verify.sourcify();
 }
 
 main()

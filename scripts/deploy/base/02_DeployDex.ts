@@ -2,13 +2,16 @@ import { Deploy } from "../Deploy";
 import { ethers } from "hardhat";
 import { Misc } from "../../Misc";
 import { Verify } from "../../Verify";
-
-const WMTR_TOKEN = '0xfAC315d105E5A7fe2174B3EB1f95C257A9A5e271';
+import { readFileSync } from "fs";
 
 async function main() {
   const [deployer] = await ethers.getSigners();
+  const chainId = await deployer.getChainId();
+  const path = `./scripts/Addresses/${chainId}/`;
+  const file = 'WMTR.json';
+  const WMTR_TOKEN = JSON.parse(readFileSync(path + file).toString());
 
-  const [factory, router] = await Deploy.deployDex(deployer, WMTR_TOKEN);
+  const [factory, router] = await Deploy.deployDex(deployer, WMTR_TOKEN.address);
 
   const lib = await Deploy.deployLibrary(deployer, router.address)
 
@@ -22,9 +25,7 @@ async function main() {
   Misc.saveFile(await deployer.getChainId(), "Router", router.address);
   Misc.saveFile(await deployer.getChainId(), "SolidlyLibrary", lib.address);
 
-  await Verify.verify(factory.address);
-  await Verify.verify(router.address);
-  await Verify.verify(lib.address);
+  await Verify.sourcify();
 }
 
 main()
