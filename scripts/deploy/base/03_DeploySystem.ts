@@ -99,7 +99,7 @@ async function main() {
     receipt = await minter.adminSetVoterPerWeek(VoterPerWeek);
     console.info(`adminSetVoterPerWeek:`, receipt.hash);
 
-    TokenJson.push(tokenJson.address);
+    // TokenJson.push(tokenJson.address);
 
     const voter = await ethers.getContractAt("VoltVoterUpgradeable", voterProxy.address, admin) as VoltVoterUpgradeable;
     receipt = await voter.init(TokenJson, minterProxy.address);
