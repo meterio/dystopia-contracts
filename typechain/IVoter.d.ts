@@ -26,6 +26,7 @@ interface IVoterInterface extends ethers.utils.Interface {
     "distribute(address)": FunctionFragment;
     "emitDeposit(uint256,address,uint256)": FunctionFragment;
     "emitWithdraw(uint256,address,uint256)": FunctionFragment;
+    "init(address[],address)": FunctionFragment;
     "notifyRewardAmount(uint256)": FunctionFragment;
     "ve()": FunctionFragment;
   };
@@ -46,6 +47,10 @@ interface IVoterInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "emitWithdraw",
     values: [BigNumberish, string, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "init",
+    values: [string[], string]
   ): string;
   encodeFunctionData(
     functionFragment: "notifyRewardAmount",
@@ -70,6 +75,7 @@ interface IVoterInterface extends ethers.utils.Interface {
     functionFragment: "emitWithdraw",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "init", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "notifyRewardAmount",
     data: BytesLike
@@ -154,6 +160,12 @@ export class IVoter extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    init(
+      _tokens: string[],
+      _minter: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     notifyRewardAmount(
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -193,6 +205,12 @@ export class IVoter extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  init(
+    _tokens: string[],
+    _minter: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   notifyRewardAmount(
     amount: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -226,6 +244,12 @@ export class IVoter extends BaseContract {
       _tokenId: BigNumberish,
       account: string,
       amount: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    init(
+      _tokens: string[],
+      _minter: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -271,6 +295,12 @@ export class IVoter extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    init(
+      _tokens: string[],
+      _minter: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     notifyRewardAmount(
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -308,6 +338,12 @@ export class IVoter extends BaseContract {
       _tokenId: BigNumberish,
       account: string,
       amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    init(
+      _tokens: string[],
+      _minter: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

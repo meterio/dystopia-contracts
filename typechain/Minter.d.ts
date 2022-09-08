@@ -41,6 +41,7 @@ interface MinterInterface extends ethers.utils.Interface {
     "veDistPerWeek()": FunctionFragment;
     "voterPerWeek()": FunctionFragment;
     "weeklyEmission()": FunctionFragment;
+    "whiteList(address[])": FunctionFragment;
     "withdraw(uint256)": FunctionFragment;
   };
 
@@ -118,6 +119,7 @@ interface MinterInterface extends ethers.utils.Interface {
     functionFragment: "weeklyEmission",
     values?: undefined
   ): string;
+  encodeFunctionData(functionFragment: "whiteList", values: [string[]]): string;
   encodeFunctionData(
     functionFragment: "withdraw",
     values: [BigNumberish]
@@ -182,6 +184,7 @@ interface MinterInterface extends ethers.utils.Interface {
     functionFragment: "weeklyEmission",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "whiteList", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "withdraw", data: BytesLike): Result;
 
   events: {
@@ -334,6 +337,11 @@ export class Minter extends BaseContract {
 
     weeklyEmission(overrides?: CallOverrides): Promise<[BigNumber]>;
 
+    whiteList(
+      tokens: string[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     withdraw(
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -419,6 +427,11 @@ export class Minter extends BaseContract {
 
   weeklyEmission(overrides?: CallOverrides): Promise<BigNumber>;
 
+  whiteList(
+    tokens: string[],
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   withdraw(
     amount: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -501,6 +514,8 @@ export class Minter extends BaseContract {
     voterPerWeek(overrides?: CallOverrides): Promise<BigNumber>;
 
     weeklyEmission(overrides?: CallOverrides): Promise<BigNumber>;
+
+    whiteList(tokens: string[], overrides?: CallOverrides): Promise<void>;
 
     withdraw(amount: BigNumberish, overrides?: CallOverrides): Promise<void>;
   };
@@ -644,6 +659,11 @@ export class Minter extends BaseContract {
 
     weeklyEmission(overrides?: CallOverrides): Promise<BigNumber>;
 
+    whiteList(
+      tokens: string[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     withdraw(
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -734,6 +754,11 @@ export class Minter extends BaseContract {
     voterPerWeek(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     weeklyEmission(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    whiteList(
+      tokens: string[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
 
     withdraw(
       amount: BigNumberish,

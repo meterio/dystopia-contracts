@@ -2,6 +2,7 @@ import { Deploy } from "../deploy/Deploy";
 import { ethers } from "hardhat";
 import { Misc } from "../Misc";
 import { VoltVoterUpgradeable, TransparentUpgradeableProxy } from "../../typechain";
+import { Verify } from "../Verify";
 
 async function main() {
   const [deployer, admin] = await ethers.getSigners();
@@ -10,6 +11,7 @@ async function main() {
   if (voterJson.address != ethers.constants.AddressZero) {
 
     let voterImpl = await Deploy.deployContract(deployer, "VoltVoterUpgradeable") as VoltVoterUpgradeable;
+    await Verify.sourcify();
 
     let voterProxy = await ethers.getContractAt("TransparentUpgradeableProxy", voterJson.address, deployer) as TransparentUpgradeableProxy;
 

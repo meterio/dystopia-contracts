@@ -41,7 +41,7 @@ interface VoltVoterInterface extends ethers.utils.Interface {
     "gaugeFactory()": FunctionFragment;
     "gauges(address)": FunctionFragment;
     "index()": FunctionFragment;
-    "initialize(address[],address)": FunctionFragment;
+    "init(address[],address)": FunctionFragment;
     "isGauge(address)": FunctionFragment;
     "isWhitelisted(address)": FunctionFragment;
     "listingFee()": FunctionFragment;
@@ -130,7 +130,7 @@ interface VoltVoterInterface extends ethers.utils.Interface {
   encodeFunctionData(functionFragment: "gauges", values: [string]): string;
   encodeFunctionData(functionFragment: "index", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "initialize",
+    functionFragment: "init",
     values: [string[], string]
   ): string;
   encodeFunctionData(functionFragment: "isGauge", values: [string]): string;
@@ -261,7 +261,7 @@ interface VoltVoterInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "gauges", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "index", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "init", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "isGauge", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "isWhitelisted",
@@ -556,7 +556,7 @@ export class VoltVoter extends BaseContract {
 
     index(overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    initialize(
+    init(
       _tokens: string[],
       _minter: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -756,7 +756,7 @@ export class VoltVoter extends BaseContract {
 
   index(overrides?: CallOverrides): Promise<BigNumber>;
 
-  initialize(
+  init(
     _tokens: string[],
     _minter: string,
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -945,7 +945,7 @@ export class VoltVoter extends BaseContract {
 
     index(overrides?: CallOverrides): Promise<BigNumber>;
 
-    initialize(
+    init(
       _tokens: string[],
       _minter: string,
       overrides?: CallOverrides
@@ -1316,7 +1316,7 @@ export class VoltVoter extends BaseContract {
 
     index(overrides?: CallOverrides): Promise<BigNumber>;
 
-    initialize(
+    init(
       _tokens: string[],
       _minter: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -1526,7 +1526,7 @@ export class VoltVoter extends BaseContract {
 
     index(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    initialize(
+    init(
       _tokens: string[],
       _minter: string,
       overrides?: Overrides & { from?: string | Promise<string> }

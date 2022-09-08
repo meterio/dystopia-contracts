@@ -2,6 +2,7 @@ import { Deploy } from "../deploy/Deploy";
 import { ethers } from "hardhat";
 import { Misc } from "../Misc";
 import { MinterUpgradeable, TransparentUpgradeableProxy } from "../../typechain";
+import { Verify } from "../Verify";
 
 async function main() {
   const [deployer, admin] = await ethers.getSigners();
@@ -10,6 +11,7 @@ async function main() {
   if (minterjson.address != ethers.constants.AddressZero) {
 
     let minterImpl = await Deploy.deployContract(deployer, "MinterUpgradeable") as MinterUpgradeable;
+    await Verify.sourcify();
 
     let minterProxy = await ethers.getContractAt("TransparentUpgradeableProxy", minterjson.address, deployer) as TransparentUpgradeableProxy;
 

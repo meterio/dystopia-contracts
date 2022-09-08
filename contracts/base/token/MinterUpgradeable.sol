@@ -77,6 +77,10 @@ contract MinterUpgradeable is AccessControl, Initializable {
         activeperiod = _activeperiod;
     }
 
+    function whiteList(address[] memory tokens) public onlyAdmin {
+        _voter().init(tokens, address(this));
+    }
+
     function updatePeriod() external onlyAdmin returns (uint256) {
         uint256 _period = activeperiod;
         if (block.timestamp >= _period + _WEEK) {

@@ -105,7 +105,7 @@ contract VoltVoter is IVoter, Reentrancy {
         minter = msg.sender;
     }
 
-    function initialize(address[] memory _tokens, address _minter) external {
+    function init(address[] memory _tokens, address _minter) external override {
         require(msg.sender == minter, "!minter");
         for (uint i = 0; i < _tokens.length; i++) {
             _whitelist(_tokens[i]);
@@ -120,7 +120,10 @@ contract VoltVoter is IVoter, Reentrancy {
 
     /// @dev 20% of circulation supply.
     function _listingFee() internal view returns (uint) {
-        return (IERC20(token).totalSupply() - IERC20(ve).totalSupply()) / 20;
+        return
+            (IERC20(token).totalSupply() -
+                IERC20(ve).totalSupply() -
+                IERC20(token).balanceOf(minter)) / 20;
     }
 
     /// @dev Remove all votes for given tokenId.

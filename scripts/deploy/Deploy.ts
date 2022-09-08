@@ -233,7 +233,7 @@ export class Deploy {
     await Misc.runAndWait(() => controller.setVoter(voter.address));
     await Misc.runAndWait(() => minter.grantRole(ethers.constants.HashZero, voter.address));
     voterTokens.push(token.address);
-    await Misc.runAndWait(() => voter.initialize(voterTokens, minter.address));
+    await Misc.runAndWait(() => voter.init(voterTokens, minter.address));
 
     return [
       controller,
@@ -268,7 +268,7 @@ export class Deploy {
     await Misc.runAndWait(() => controller.setVoter(voter.address));
     await Misc.runAndWait(() => minter.grantRole(ethers.constants.HashZero, voter.address));
     voterTokens.push(tokenAddr);
-    await Misc.runAndWait(() => voter.initialize(voterTokens, minter.address));
+    await Misc.runAndWait(() => voter.init(voterTokens, minter.address));
 
     return [
       veDist,

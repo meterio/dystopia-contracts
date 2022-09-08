@@ -24,4 +24,6 @@ interface IVoter {
     function distribute(address _gauge) external;
 
     function notifyRewardAmount(uint amount) external;
+
+    function init(address[] memory _tokens, address _minter) external;
 }

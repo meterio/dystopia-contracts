@@ -98,7 +98,7 @@ contract VoltVoterUpgradeable is IVoter, Reentrancy, Initializable {
         address _gaugeFactory,
         address _bribeFactory,
         address _minter
-    ) public initializer{
+    ) public initializer {
         ve = _ve;
         factory = _factory;
         token = IVe(_ve).token();
@@ -123,7 +123,10 @@ contract VoltVoterUpgradeable is IVoter, Reentrancy, Initializable {
 
     /// @dev 20% of circulation supply.
     function _listingFee() internal view returns (uint) {
-        return (IERC20(token).totalSupply() - IERC20(ve).totalSupply()) / 20;
+        return
+            (IERC20(token).totalSupply() -
+                IERC20(ve).totalSupply() -
+                IERC20(token).balanceOf(minter)) / 20;
     }
 
     /// @dev Remove all votes for given tokenId.

@@ -2,6 +2,7 @@ import { Deploy } from "../deploy/Deploy";
 import { ethers } from "hardhat";
 import { Misc } from "../Misc";
 import { VeDistUpgradeable, TransparentUpgradeableProxy } from "../../typechain";
+import { Verify } from "../Verify";
 
 async function main() {
   const [deployer, admin] = await ethers.getSigners();
@@ -10,6 +11,7 @@ async function main() {
   if (veDistJson.address != ethers.constants.AddressZero) {
 
     let veDistImpl = await Deploy.deployContract(deployer, "VeDistUpgradeable") as VeDistUpgradeable;
+    await Verify.sourcify();
 
     let veDistProxy = await ethers.getContractAt("TransparentUpgradeableProxy", veDistJson.address, deployer) as TransparentUpgradeableProxy;
 
