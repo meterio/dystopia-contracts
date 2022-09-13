@@ -14,10 +14,10 @@ async function main() {
     let receipt = await minter.updatePeriod();
     console.info(`updatePeriod:`, receipt.hash);
 
-    const voter = await ethers.getContractAt("VoltVoter",voterJson.address, admin) as VoltVoter;
-    console.info("find voter:", voterJson.address);
-    receipt = await voter.distributeAll();
-    console.info(`distributeAll:`, receipt.hash);
+    // const voter = await ethers.getContractAt("VoltVoter",voterJson.address, admin) as VoltVoter;
+    // console.info("find voter:", voterJson.address);
+    // receipt = await voter.distributeAll();
+    // console.info(`distributeAll:`, receipt.hash);
     
   } else {
     console.log("No factory address")
