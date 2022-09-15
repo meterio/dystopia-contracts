@@ -3,7 +3,7 @@ import { Misc } from "../Misc";
 import { TransparentUpgradeableProxy } from "../../typechain";
 import { Signer } from "ethers";
 
-const newAdmin = "0x175FB9401BB5E360FF3c0Ef00097116944128930";
+const newAdmin = "0x386A478c9468105E3110fAa054B39cC203BBC348";
 
 const changeAdmin = async (name: string, signer: Signer) => {
   const json = Misc.getContract(await signer.getChainId(), name);
