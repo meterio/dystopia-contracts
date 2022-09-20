@@ -5,7 +5,7 @@ import { formatEther } from "ethers/lib/utils";
 
 async function main() {
   const [deployer, admin] = await ethers.getSigners();
-  const user = '0x1479F0954dF7c667b1817E4Eb3C0f4723eB054F5';
+  const user = '0x8cafd0397e1b09199A1B1239030Cc6b011AE696d';
   const factoryJson = Misc.getContract(await deployer.getChainId(), "Factory");
   const voterJson = Misc.getContract(await deployer.getChainId(), "Voter");
   type Earned = {

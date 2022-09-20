@@ -4,8 +4,8 @@ import { Misc } from "../../Misc";
 import { MinterUpgradeable } from "../../../typechain";
 import { parseUnits } from "ethers/lib/utils";
 
-const VeDistPerWeek = parseUnits('100');
-const VoterPerWeek = parseUnits('900');
+const VeDistPerWeek = parseUnits('0');
+const VoterPerWeek = parseUnits('400000');
 
 async function main() {
   const [deployer, admin] = await ethers.getSigners();
