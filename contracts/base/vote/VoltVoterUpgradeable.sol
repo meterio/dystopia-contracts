@@ -165,29 +165,27 @@ contract VoltVoterUpgradeable is IVoter, Reentrancy, Initializable {
         address[] memory _poolVote = poolVote[_tokenId];
         uint _poolCnt = _poolVote.length;
         int256[] memory _weights = new int256[](_poolCnt);
+        int256 _totalVoteWeight = 0;
 
         for (uint i = 0; i < _poolCnt; i++) {
             _weights[i] = votes[_tokenId][_poolVote[i]];
+            _totalVoteWeight += _weights[i] > 0 ? _weights[i] : -_weights[i];
         }
 
-        _vote(_tokenId, _poolVote, _weights);
+        _vote(_tokenId, _poolVote, _weights, _totalVoteWeight);
     }
 
     function _vote(
         uint _tokenId,
         address[] memory _poolVote,
-        int256[] memory _weights
+        int256[] memory _weights,
+        int256 _totalVoteWeight
     ) internal {
         _reset(_tokenId);
         uint _poolCnt = _poolVote.length;
         int256 _weight = int256(IVe(ve).balanceOfNFT(_tokenId));
-        int256 _totalVoteWeight = 0;
         int256 _totalWeight = 0;
         int256 _usedWeight = 0;
-
-        for (uint i = 0; i < _poolCnt; i++) {
-            _totalVoteWeight += _weights[i] > 0 ? _weights[i] : -_weights[i];
-        }
 
         for (uint i = 0; i < _poolCnt; i++) {
             address _pool = _poolVote[i];
@@ -224,7 +222,27 @@ contract VoltVoterUpgradeable is IVoter, Reentrancy, Initializable {
     ) external {
         require(IVe(ve).isApprovedOrOwner(msg.sender, tokenId), "!owner");
         require(_poolVote.length == _weights.length, "!arrays");
-        _vote(tokenId, _poolVote, _weights);
+        int256 _totalVoteWeight = 0;
+        for (uint i = 0; i < _poolVote.length; i++) {
+            _totalVoteWeight += _weights[i] > 0 ? _weights[i] : -_weights[i];
+        }
+        _vote(tokenId, _poolVote, _weights, _totalVoteWeight);
+    }
+
+    function votePart(
+        uint tokenId,
+        address[] calldata _poolVote,
+        int256[] calldata _weights
+    ) external {
+        require(IVe(ve).isApprovedOrOwner(msg.sender, tokenId), "!owner");
+        require(_poolVote.length == _weights.length, "!arrays");
+        int256 _totalVoteWeight = 0;
+        for (uint i = 0; i < _poolVote.length; i++) {
+            _totalVoteWeight += _weights[i] > 0 ? _weights[i] : -_weights[i];
+        }
+        require(_totalVoteWeight <= 100, "totalVoteWeight");
+        _totalVoteWeight = 100;
+        _vote(tokenId, _poolVote, _weights, _totalVoteWeight);
     }
 
     /// @dev Add token to whitelist. Only pools with whitelisted tokens can be added to gauge.

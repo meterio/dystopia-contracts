@@ -66,6 +66,7 @@ interface VoltVoterUpgradeableInterface extends ethers.utils.Interface {
     "usedWeights(uint256)": FunctionFragment;
     "ve()": FunctionFragment;
     "vote(uint256,address[],int256[])": FunctionFragment;
+    "votePart(uint256,address[],int256[])": FunctionFragment;
     "votes(uint256,address)": FunctionFragment;
     "weights(address)": FunctionFragment;
     "whitelist(address,uint256)": FunctionFragment;
@@ -198,6 +199,10 @@ interface VoltVoterUpgradeableInterface extends ethers.utils.Interface {
     values: [BigNumberish, string[], BigNumberish[]]
   ): string;
   encodeFunctionData(
+    functionFragment: "votePart",
+    values: [BigNumberish, string[], BigNumberish[]]
+  ): string;
+  encodeFunctionData(
     functionFragment: "votes",
     values: [BigNumberish, string]
   ): string;
@@ -324,6 +329,7 @@ interface VoltVoterUpgradeableInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "ve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "vote", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "votePart", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "votes", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "weights", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "whitelist", data: BytesLike): Result;
@@ -666,6 +672,13 @@ export class VoltVoterUpgradeable extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    votePart(
+      tokenId: BigNumberish,
+      _poolVote: string[],
+      _weights: BigNumberish[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     votes(
       arg0: BigNumberish,
       arg1: string,
@@ -875,6 +888,13 @@ export class VoltVoterUpgradeable extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  votePart(
+    tokenId: BigNumberish,
+    _poolVote: string[],
+    _weights: BigNumberish[],
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   votes(
     arg0: BigNumberish,
     arg1: string,
@@ -1053,6 +1073,13 @@ export class VoltVoterUpgradeable extends BaseContract {
     ve(overrides?: CallOverrides): Promise<string>;
 
     vote(
+      tokenId: BigNumberish,
+      _poolVote: string[],
+      _weights: BigNumberish[],
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    votePart(
       tokenId: BigNumberish,
       _poolVote: string[],
       _weights: BigNumberish[],
@@ -1453,6 +1480,13 @@ export class VoltVoterUpgradeable extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    votePart(
+      tokenId: BigNumberish,
+      _poolVote: string[],
+      _weights: BigNumberish[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     votes(
       arg0: BigNumberish,
       arg1: string,
@@ -1681,6 +1715,13 @@ export class VoltVoterUpgradeable extends BaseContract {
     ve(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     vote(
+      tokenId: BigNumberish,
+      _poolVote: string[],
+      _weights: BigNumberish[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    votePart(
       tokenId: BigNumberish,
       _poolVote: string[],
       _weights: BigNumberish[],
