@@ -15,15 +15,16 @@ async function main() {
 
     let voterProxy = await ethers.getContractAt("TransparentUpgradeableProxy", voterJson.address, deployer) as TransparentUpgradeableProxy;
 
-    let receipt = await voterProxy.upgradeTo(
-      voterImpl.address,
-    );
-    console.log("upgradeTo:", receipt.hash);
+    console.log(voterProxy.interface.encodeFunctionData('upgradeTo',[voterImpl.address]));
+    // let receipt = await voterProxy.upgradeTo(
+    //   voterImpl.address,
+    // );
+    // console.log("upgradeTo:", receipt.hash);
 
-    const data = ''
-      + 'update to: ' + voterImpl.address + '\n'
+    // const data = ''
+    //   + 'update to: ' + voterImpl.address + '\n'
 
-    console.log(data);
+    // console.log(data);
     Misc.saveFile(await deployer.getChainId(), "VoterImpl", voterImpl.address);
   } else {
     console.log("No factory address")
