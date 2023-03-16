@@ -11,9 +11,9 @@ async function main() {
   if (voterJson.address != ethers.constants.AddressZero) {
 
     let voterImpl = await Deploy.deployContract(deployer, "VoltVoterUpgradeable") as VoltVoterUpgradeable;
-    await Verify.sourcify();
+    // await Verify.sourcify();
 
-    let voterProxy = await ethers.getContractAt("TransparentUpgradeableProxy", voterJson.address, deployer) as TransparentUpgradeableProxy;
+    let voterProxy = await ethers.getContractAt("contracts/proxy/TransparentUpgradeableProxy.sol:TransparentUpgradeableProxy", voterJson.address, deployer) as TransparentUpgradeableProxy;
 
     console.log(voterProxy.interface.encodeFunctionData('upgradeTo',[voterImpl.address]));
     // let receipt = await voterProxy.upgradeTo(
@@ -25,7 +25,7 @@ async function main() {
     //   + 'update to: ' + voterImpl.address + '\n'
 
     // console.log(data);
-    Misc.saveFile(await deployer.getChainId(), "VoterImpl", voterImpl.address);
+    // Misc.saveFile(await deployer.getChainId(), "VoterImpl", voterImpl.address);
   } else {
     console.log("No factory address")
   }

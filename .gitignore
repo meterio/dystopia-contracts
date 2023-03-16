@@ -7,7 +7,7 @@ package-lock.json
 cache
 coverage
 coverage.json
-
+.history
 .idea
 .hardhat
 secrets.ts

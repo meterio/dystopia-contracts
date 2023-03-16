@@ -93,13 +93,14 @@ contract MinterUpgradeable is AccessControl, Initializable {
                 _balanceOf >= veDistPerWeek + voterPerWeek,
                 "Insufficient balance"
             );
-
-            require(
-                _token.transfer(address(_veDist()), veDistPerWeek),
-                "Transfer Fail"
-            );
-            _veDist().checkpointToken();
-            _veDist().checkpointTotalSupply();
+            if (veDistPerWeek > 0) {
+                require(
+                    _token.transfer(address(_veDist()), veDistPerWeek),
+                    "Transfer Fail"
+                );
+                _veDist().checkpointToken();
+                _veDist().checkpointTotalSupply();
+            }
 
             _token.approve(address(_voter()), voterPerWeek);
             _voter().notifyRewardAmount(voterPerWeek);

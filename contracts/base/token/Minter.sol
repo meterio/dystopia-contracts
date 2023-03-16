@@ -92,10 +92,9 @@ contract Minter is AccessControl {
                 _veDist().checkpointToken();
                 _veDist().checkpointTotalSupply();
             }
-            if (voterPerWeek > 0) {
-                _token.approve(address(_voter()), voterPerWeek);
-                _voter().notifyRewardAmount(voterPerWeek);
-            }
+
+            _token.approve(address(_voter()), voterPerWeek);
+            _voter().notifyRewardAmount(voterPerWeek);
 
             emit Send(msg.sender, veDistPerWeek, voterPerWeek);
         }
