@@ -9,19 +9,24 @@ async function main() {
   const [deployer, admin] = await ethers.getSigners();
 
   const minterjson = Misc.getContract(await deployer.getChainId(), "Minter");
+  minterjson.address = "0x5Ea2076328450b97986b2A1BE6a08C0A8e4Ca968";
   if (minterjson.address != ethers.constants.AddressZero) {
-    let minter = await ethers.getContractAt("MinterUpgradeable", minterjson.address, admin) as MinterUpgradeable;
+    let minter = (await ethers.getContractAt(
+      "MinterUpgradeable",
+      minterjson.address,
+      admin
+    )) as MinterUpgradeable;
 
     let receipt = await minter.whiteList([tokenAddress]);
     console.info(`whiteList:`, receipt.hash);
   } else {
-    console.log("No Minter address")
+    console.log("No Minter address");
   }
 }
 
 main()
   .then(() => process.exit(0))
-  .catch(error => {
+  .catch((error) => {
     console.error(error);
     process.exit(1);
   });
