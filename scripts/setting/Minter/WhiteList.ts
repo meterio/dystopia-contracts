@@ -2,7 +2,8 @@ import { ethers } from "hardhat";
 import { Misc } from "../../Misc";
 import { MinterUpgradeable } from "../../../typechain";
 
-const tokenAddress = "0x160361ce13ec33C993b5cCA8f62B6864943eb083"; // WMTR meter main
+// const tokenAddress = "0x160361ce13ec33C993b5cCA8f62B6864943eb083"; // WMTR meter main
+const tokenAddress = "0x46fBF4487fA1B9C70d35BD761c51c360dF9459ed"; // THETA
 
 async function main() {
   const [deployer, admin] = await ethers.getSigners();

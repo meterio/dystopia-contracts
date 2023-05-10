@@ -3,9 +3,12 @@ import { Bribe } from "../../typechain";
 import { readFileSync } from "fs";
 import { parseUnits } from "ethers/lib/utils";
 import { BigNumber, ContractTransaction, constants } from "ethers";
+
 const mtrg = "0x228ebBeE999c6a7ad74A6130E81b12f9Fe237Ba3";
+
 async function main() {
   const [deployer] = await ethers.getSigners();
+  console.log("wallet:",deployer.address);
   const path = `./scripts/setting/`;
   const file = "Bribes.csv";
   const csv = readFileSync(path + file).toString();

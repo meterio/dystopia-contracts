@@ -164,6 +164,11 @@ export default {
       gasPrice: 500000000000,
       accounts: [process.env.PRIVATE_KEY_0, process.env.PRIVATE_KEY_1],
     },
+    theta: {
+      url: "https://explorer.thetatoken.org",
+      chainId: 361,
+      accounts: [process.env.PRIVATE_KEY_0],
+    },
     ganache: {
       url: argv.ganacheRpc,
       chainId: 1337,
