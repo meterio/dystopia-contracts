@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.13;
 
-interface IWMTR {
+interface IWETH {
     function name() external view returns (string memory);
 
     function approve(address guy, uint256 wad) external returns (bool);

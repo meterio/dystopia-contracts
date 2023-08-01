@@ -5,7 +5,7 @@ pragma solidity ^0.8.13;
 import "../../lib/Math.sol";
 import "../../lib/SafeERC20.sol";
 import "../../interface/IERC20.sol";
-import "../../interface/IWMTR.sol";
+import "../../interface/IWETH.sol";
 import "../../interface/IPair.sol";
 import "../../interface/IFactory.sol";
 
@@ -19,7 +19,7 @@ contract VoltRouter01 {
     }
 
     address public immutable factory;
-    IWMTR public immutable wmtr;
+    IWETH public immutable weth;
     uint internal constant MINIMUM_LIQUIDITY = 10**3;
     bytes32 immutable pairCodeHash;
 
@@ -28,15 +28,15 @@ contract VoltRouter01 {
         _;
     }
 
-    constructor(address _factory, address _wmtr) {
+    constructor(address _factory, address _weth) {
         factory = _factory;
         pairCodeHash = IFactory(_factory).pairCodeHash();
-        wmtr = IWMTR(_wmtr);
+        weth = IWETH(_weth);
     }
 
     receive() external payable {
         // only accept ETH via fallback from the WETH contract
-        require(msg.sender == address(wmtr), "VoltRouter: NOT_WMTR");
+        require(msg.sender == address(weth), "VoltRouter: NOT_WETH");
     }
 
     function sortTokens(address tokenA, address tokenB)
@@ -361,12 +361,12 @@ contract VoltRouter01 {
         liquidity = IPair(pair).mint(to);
     }
 
-    function addLiquidityMTR(
+    function addLiquidityETH(
         address token,
         bool stable,
         uint amountTokenDesired,
         uint amountTokenMin,
-        uint amountMTRMin,
+        uint amountETHMin,
         address to,
         uint deadline
     )
@@ -375,27 +375,27 @@ contract VoltRouter01 {
         ensure(deadline)
         returns (
             uint amountToken,
-            uint amountMTR,
+            uint amountETH,
             uint liquidity
         )
     {
-        (amountToken, amountMTR) = _addLiquidity(
+        (amountToken, amountETH) = _addLiquidity(
             token,
-            address(wmtr),
+            address(weth),
             stable,
             amountTokenDesired,
             msg.value,
             amountTokenMin,
-            amountMTRMin
+            amountETHMin
         );
-        address pair = _pairFor(token, address(wmtr), stable);
+        address pair = _pairFor(token, address(weth), stable);
         IERC20(token).safeTransferFrom(msg.sender, pair, amountToken);
-        wmtr.deposit{value: amountMTR}();
-        assert(wmtr.transfer(pair, amountMTR));
+        weth.deposit{value: amountETH}();
+        assert(weth.transfer(pair, amountETH));
         liquidity = IPair(pair).mint(to);
         // refund dust eth, if any
-        if (msg.value > amountMTR)
-            _safeTransferMTR(msg.sender, msg.value - amountMTR);
+        if (msg.value > amountETH)
+            _safeTransferETH(msg.sender, msg.value - amountETH);
     }
 
     // **** REMOVE LIQUIDITY ****
@@ -445,49 +445,49 @@ contract VoltRouter01 {
         require(amountB >= amountBMin, "VoltRouter: INSUFFICIENT_B_AMOUNT");
     }
 
-    function removeLiquidityMTR(
+    function removeLiquidityETH(
         address token,
         bool stable,
         uint liquidity,
         uint amountTokenMin,
-        uint amountMTRMin,
+        uint amountETHMin,
         address to,
         uint deadline
-    ) external returns (uint amountToken, uint amountMTR) {
+    ) external returns (uint amountToken, uint amountETH) {
         return
-            _removeLiquidityMTR(
+            _removeLiquidityETH(
                 token,
                 stable,
                 liquidity,
                 amountTokenMin,
-                amountMTRMin,
+                amountETHMin,
                 to,
                 deadline
             );
     }
 
-    function _removeLiquidityMTR(
+    function _removeLiquidityETH(
         address token,
         bool stable,
         uint liquidity,
         uint amountTokenMin,
-        uint amountMTRMin,
+        uint amountETHMin,
         address to,
         uint deadline
-    ) internal ensure(deadline) returns (uint amountToken, uint amountMTR) {
-        (amountToken, amountMTR) = _removeLiquidity(
+    ) internal ensure(deadline) returns (uint amountToken, uint amountETH) {
+        (amountToken, amountETH) = _removeLiquidity(
             token,
-            address(wmtr),
+            address(weth),
             stable,
             liquidity,
             amountTokenMin,
-            amountMTRMin,
+            amountETHMin,
             address(this),
             deadline
         );
         IERC20(token).safeTransfer(to, amountToken);
-        wmtr.withdraw(amountMTR);
-        _safeTransferMTR(to, amountMTR);
+        weth.withdraw(amountETH);
+        _safeTransferETH(to, amountETH);
     }
 
     function removeLiquidityWithPermit(
@@ -530,34 +530,34 @@ contract VoltRouter01 {
         );
     }
 
-    function removeLiquidityMTRWithPermit(
+    function removeLiquidityETHWithPermit(
         address token,
         bool stable,
         uint liquidity,
         uint amountTokenMin,
-        uint amountMTRMin,
+        uint amountETHMin,
         address to,
         uint deadline,
         bool approveMax,
         uint8 v,
         bytes32 r,
         bytes32 s
-    ) external returns (uint amountToken, uint amountMTR) {
-        address pair = _pairFor(token, address(wmtr), stable);
+    ) external returns (uint amountToken, uint amountETH) {
+        address pair = _pairFor(token, address(weth), stable);
         uint value = approveMax ? type(uint).max : liquidity;
         IPair(pair).permit(msg.sender, address(this), value, deadline, v, r, s);
-        (amountToken, amountMTR) = _removeLiquidityMTR(
+        (amountToken, amountETH) = _removeLiquidityETH(
             token,
             stable,
             liquidity,
             amountTokenMin,
-            amountMTRMin,
+            amountETHMin,
             to,
             deadline
         );
     }
 
-    function removeLiquidityMTRSupportingFeeOnTransferTokens(
+    function removeLiquidityETHSupportingFeeOnTransferTokens(
         address token,
         bool stable,
         uint liquidity,
@@ -567,7 +567,7 @@ contract VoltRouter01 {
         uint deadline
     ) external returns (uint amountToken, uint amountFTM) {
         return
-            _removeLiquidityMTRSupportingFeeOnTransferTokens(
+            _removeLiquidityETHSupportingFeeOnTransferTokens(
                 token,
                 stable,
                 liquidity,
@@ -578,7 +578,7 @@ contract VoltRouter01 {
             );
     }
 
-    function _removeLiquidityMTRSupportingFeeOnTransferTokens(
+    function _removeLiquidityETHSupportingFeeOnTransferTokens(
         address token,
         bool stable,
         uint liquidity,
@@ -589,7 +589,7 @@ contract VoltRouter01 {
     ) internal ensure(deadline) returns (uint amountToken, uint amountFTM) {
         (amountToken, amountFTM) = _removeLiquidity(
             token,
-            address(wmtr),
+            address(weth),
             stable,
             liquidity,
             amountTokenMin,
@@ -598,11 +598,11 @@ contract VoltRouter01 {
             deadline
         );
         IERC20(token).safeTransfer(to, IERC20(token).balanceOf(address(this)));
-        wmtr.withdraw(amountFTM);
-        _safeTransferMTR(to, amountFTM);
+        weth.withdraw(amountFTM);
+        _safeTransferETH(to, amountFTM);
     }
 
-    function removeLiquidityMTRWithPermitSupportingFeeOnTransferTokens(
+    function removeLiquidityETHWithPermitSupportingFeeOnTransferTokens(
         address token,
         bool stable,
         uint liquidity,
@@ -615,13 +615,13 @@ contract VoltRouter01 {
         bytes32 r,
         bytes32 s
     ) external returns (uint amountToken, uint amountFTM) {
-        address pair = _pairFor(token, address(wmtr), stable);
+        address pair = _pairFor(token, address(weth), stable);
         uint value = approveMax ? type(uint).max : liquidity;
         IPair(pair).permit(msg.sender, address(this), value, deadline, v, r, s);
         (
             amountToken,
             amountFTM
-        ) = _removeLiquidityMTRSupportingFeeOnTransferTokens(
+        ) = _removeLiquidityETHSupportingFeeOnTransferTokens(
             token,
             stable,
             liquidity,
@@ -739,21 +739,21 @@ contract VoltRouter01 {
         _swap(amounts, routes, to);
     }
 
-    function swapExactMTRForTokens(
+    function swapExactETHForTokens(
         uint amountOutMin,
         Route[] calldata routes,
         address to,
         uint deadline
     ) external payable ensure(deadline) returns (uint[] memory amounts) {
-        require(routes[0].from == address(wmtr), "VoltRouter: INVALID_PATH");
+        require(routes[0].from == address(weth), "VoltRouter: INVALID_PATH");
         amounts = _getAmountsOut(msg.value, routes);
         require(
             amounts[amounts.length - 1] >= amountOutMin,
             "VoltRouter: INSUFFICIENT_OUTPUT_AMOUNT"
         );
-        wmtr.deposit{value: amounts[0]}();
+        weth.deposit{value: amounts[0]}();
         assert(
-            wmtr.transfer(
+            weth.transfer(
                 _pairFor(routes[0].from, routes[0].to, routes[0].stable),
                 amounts[0]
             )
@@ -761,7 +761,7 @@ contract VoltRouter01 {
         _swap(amounts, routes, to);
     }
 
-    function swapExactTokensForMTR(
+    function swapExactTokensForETH(
         uint amountIn,
         uint amountOutMin,
         Route[] calldata routes,
@@ -769,7 +769,7 @@ contract VoltRouter01 {
         uint deadline
     ) external ensure(deadline) returns (uint[] memory amounts) {
         require(
-            routes[routes.length - 1].to == address(wmtr),
+            routes[routes.length - 1].to == address(weth),
             "VoltRouter: INVALID_PATH"
         );
         amounts = _getAmountsOut(amountIn, routes);
@@ -783,8 +783,8 @@ contract VoltRouter01 {
             amounts[0]
         );
         _swap(amounts, routes, address(this));
-        wmtr.withdraw(amounts[amounts.length - 1]);
-        _safeTransferMTR(to, amounts[amounts.length - 1]);
+        weth.withdraw(amounts[amounts.length - 1]);
+        _safeTransferETH(to, amounts[amounts.length - 1]);
     }
 
     function swapExactTokensForTokensSupportingFeeOnTransferTokens(
@@ -809,17 +809,17 @@ contract VoltRouter01 {
         );
     }
 
-    function swapExactMTRForTokensSupportingFeeOnTransferTokens(
+    function swapExactETHForTokensSupportingFeeOnTransferTokens(
         uint amountOutMin,
         Route[] calldata routes,
         address to,
         uint deadline
     ) external payable ensure(deadline) {
-        require(routes[0].from == address(wmtr), "VoltRouter: INVALID_PATH");
+        require(routes[0].from == address(weth), "VoltRouter: INVALID_PATH");
         uint amountIn = msg.value;
-        wmtr.deposit{value: amountIn}();
+        weth.deposit{value: amountIn}();
         assert(
-            wmtr.transfer(
+            weth.transfer(
                 _pairFor(routes[0].from, routes[0].to, routes[0].stable),
                 amountIn
             )
@@ -834,7 +834,7 @@ contract VoltRouter01 {
         );
     }
 
-    function swapExactTokensForMTRSupportingFeeOnTransferTokens(
+    function swapExactTokensForETHSupportingFeeOnTransferTokens(
         uint amountIn,
         uint amountOutMin,
         Route[] calldata routes,
@@ -842,7 +842,7 @@ contract VoltRouter01 {
         uint deadline
     ) external ensure(deadline) {
         require(
-            routes[routes.length - 1].to == address(wmtr),
+            routes[routes.length - 1].to == address(weth),
             "VoltRouter: INVALID_PATH"
         );
         IERC20(routes[0].from).safeTransferFrom(
@@ -851,13 +851,13 @@ contract VoltRouter01 {
             amountIn
         );
         _swapSupportingFeeOnTransferTokens(routes, address(this));
-        uint amountOut = IERC20(address(wmtr)).balanceOf(address(this));
+        uint amountOut = IERC20(address(weth)).balanceOf(address(this));
         require(
             amountOut >= amountOutMin,
             "VoltRouter: INSUFFICIENT_OUTPUT_AMOUNT"
         );
-        wmtr.withdraw(amountOut);
-        _safeTransferMTR(to, amountOut);
+        weth.withdraw(amountOut);
+        _safeTransferETH(to, amountOut);
     }
 
     function UNSAFE_swapExactTokensForTokens(
@@ -875,7 +875,7 @@ contract VoltRouter01 {
         return amounts;
     }
 
-    function _safeTransferMTR(address to, uint value) internal {
+    function _safeTransferETH(address to, uint value) internal {
         (bool success, ) = to.call{value: value}(new bytes(0));
         require(success, "VoltRouter: ETH_TRANSFER_FAILED");
     }
