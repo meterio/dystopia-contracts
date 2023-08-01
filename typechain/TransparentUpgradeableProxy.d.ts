@@ -22,8 +22,6 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface TransparentUpgradeableProxyInterface extends ethers.utils.Interface {
   functions: {
-    "_admin()": FunctionFragment;
-    "_implementation()": FunctionFragment;
     "admin()": FunctionFragment;
     "changeAdmin(address)": FunctionFragment;
     "implementation()": FunctionFragment;
@@ -31,11 +29,6 @@ interface TransparentUpgradeableProxyInterface extends ethers.utils.Interface {
     "upgradeToAndCall(address,bytes)": FunctionFragment;
   };
 
-  encodeFunctionData(functionFragment: "_admin", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "_implementation",
-    values?: undefined
-  ): string;
   encodeFunctionData(functionFragment: "admin", values?: undefined): string;
   encodeFunctionData(functionFragment: "changeAdmin", values: [string]): string;
   encodeFunctionData(
@@ -48,11 +41,6 @@ interface TransparentUpgradeableProxyInterface extends ethers.utils.Interface {
     values: [string, BytesLike]
   ): string;
 
-  decodeFunctionResult(functionFragment: "_admin", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "_implementation",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "admin", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "changeAdmin",
@@ -131,12 +119,6 @@ export class TransparentUpgradeableProxy extends BaseContract {
   interface: TransparentUpgradeableProxyInterface;
 
   functions: {
-    _admin(overrides?: CallOverrides): Promise<[string]>;
-
-    _implementation(
-      overrides?: CallOverrides
-    ): Promise<[string] & { impl: string }>;
-
     admin(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -161,10 +143,6 @@ export class TransparentUpgradeableProxy extends BaseContract {
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
   };
-
-  _admin(overrides?: CallOverrides): Promise<string>;
-
-  _implementation(overrides?: CallOverrides): Promise<string>;
 
   admin(
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -191,10 +169,6 @@ export class TransparentUpgradeableProxy extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
-    _admin(overrides?: CallOverrides): Promise<string>;
-
-    _implementation(overrides?: CallOverrides): Promise<string>;
-
     admin(overrides?: CallOverrides): Promise<string>;
 
     changeAdmin(newAdmin: string, overrides?: CallOverrides): Promise<void>;
@@ -248,10 +222,6 @@ export class TransparentUpgradeableProxy extends BaseContract {
   };
 
   estimateGas: {
-    _admin(overrides?: CallOverrides): Promise<BigNumber>;
-
-    _implementation(overrides?: CallOverrides): Promise<BigNumber>;
-
     admin(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -278,10 +248,6 @@ export class TransparentUpgradeableProxy extends BaseContract {
   };
 
   populateTransaction: {
-    _admin(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    _implementation(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     admin(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
