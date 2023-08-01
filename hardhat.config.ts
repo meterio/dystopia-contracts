@@ -42,6 +42,10 @@ const argv = require("yargs/yargs")()
       type: "string",
       default: "",
     },
+    baseMainUrl: {
+      type: "string",
+      default: "https://developer-access-mainnet.base.org",
+    },
     mumbaiRpcUrl: {
       type: "string",
       default: "https://matic-mumbai.chainstacklabs.com",
@@ -64,7 +68,7 @@ const argv = require("yargs/yargs")()
     },
     networkScanKey: {
       type: "string",
-      default: "",
+      default: "RKTTPB898AE77H1FJGP1Q4Q7SGWU8QM2AZ",
     },
     privateKey: {
       type: "string",
@@ -136,6 +140,14 @@ export default {
       // gasPrice: 100_000_000_000,
       gasMultiplier: 1.3,
       accounts: [argv.privateKey],
+    },
+    base: {
+      url: argv.baseMainUrl,
+      timeout: 99999,
+      chainId: 8453,
+      // gas: 19_000_000,
+      gasPrice: 100000050,
+      accounts: [process.env.BASE_PRIVATE_KEY_0],
     },
     mumbai: {
       url: argv.mumbaiRpcUrl,

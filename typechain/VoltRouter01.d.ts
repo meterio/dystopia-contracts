@@ -24,7 +24,7 @@ interface VoltRouter01Interface extends ethers.utils.Interface {
   functions: {
     "UNSAFE_swapExactTokensForTokens(uint256[],(address,address,bool)[],address,uint256)": FunctionFragment;
     "addLiquidity(address,address,bool,uint256,uint256,uint256,uint256,address,uint256)": FunctionFragment;
-    "addLiquidityMTR(address,bool,uint256,uint256,uint256,address,uint256)": FunctionFragment;
+    "addLiquidityETH(address,bool,uint256,uint256,uint256,address,uint256)": FunctionFragment;
     "factory()": FunctionFragment;
     "getAmountOut(uint256,address,address)": FunctionFragment;
     "getAmountsOut(uint256,(address,address,bool)[])": FunctionFragment;
@@ -36,20 +36,20 @@ interface VoltRouter01Interface extends ethers.utils.Interface {
     "quoteLiquidity(uint256,uint256,uint256)": FunctionFragment;
     "quoteRemoveLiquidity(address,address,bool,uint256)": FunctionFragment;
     "removeLiquidity(address,address,bool,uint256,uint256,uint256,address,uint256)": FunctionFragment;
-    "removeLiquidityMTR(address,bool,uint256,uint256,uint256,address,uint256)": FunctionFragment;
-    "removeLiquidityMTRSupportingFeeOnTransferTokens(address,bool,uint256,uint256,uint256,address,uint256)": FunctionFragment;
-    "removeLiquidityMTRWithPermit(address,bool,uint256,uint256,uint256,address,uint256,bool,uint8,bytes32,bytes32)": FunctionFragment;
-    "removeLiquidityMTRWithPermitSupportingFeeOnTransferTokens(address,bool,uint256,uint256,uint256,address,uint256,bool,uint8,bytes32,bytes32)": FunctionFragment;
+    "removeLiquidityETH(address,bool,uint256,uint256,uint256,address,uint256)": FunctionFragment;
+    "removeLiquidityETHSupportingFeeOnTransferTokens(address,bool,uint256,uint256,uint256,address,uint256)": FunctionFragment;
+    "removeLiquidityETHWithPermit(address,bool,uint256,uint256,uint256,address,uint256,bool,uint8,bytes32,bytes32)": FunctionFragment;
+    "removeLiquidityETHWithPermitSupportingFeeOnTransferTokens(address,bool,uint256,uint256,uint256,address,uint256,bool,uint8,bytes32,bytes32)": FunctionFragment;
     "removeLiquidityWithPermit(address,address,bool,uint256,uint256,uint256,address,uint256,bool,uint8,bytes32,bytes32)": FunctionFragment;
     "sortTokens(address,address)": FunctionFragment;
-    "swapExactMTRForTokens(uint256,(address,address,bool)[],address,uint256)": FunctionFragment;
-    "swapExactMTRForTokensSupportingFeeOnTransferTokens(uint256,(address,address,bool)[],address,uint256)": FunctionFragment;
-    "swapExactTokensForMTR(uint256,uint256,(address,address,bool)[],address,uint256)": FunctionFragment;
-    "swapExactTokensForMTRSupportingFeeOnTransferTokens(uint256,uint256,(address,address,bool)[],address,uint256)": FunctionFragment;
+    "swapExactETHForTokens(uint256,(address,address,bool)[],address,uint256)": FunctionFragment;
+    "swapExactETHForTokensSupportingFeeOnTransferTokens(uint256,(address,address,bool)[],address,uint256)": FunctionFragment;
+    "swapExactTokensForETH(uint256,uint256,(address,address,bool)[],address,uint256)": FunctionFragment;
+    "swapExactTokensForETHSupportingFeeOnTransferTokens(uint256,uint256,(address,address,bool)[],address,uint256)": FunctionFragment;
     "swapExactTokensForTokens(uint256,uint256,(address,address,bool)[],address,uint256)": FunctionFragment;
     "swapExactTokensForTokensSimple(uint256,uint256,address,address,bool,address,uint256)": FunctionFragment;
     "swapExactTokensForTokensSupportingFeeOnTransferTokens(uint256,uint256,(address,address,bool)[],address,uint256)": FunctionFragment;
-    "wmtr()": FunctionFragment;
+    "weth()": FunctionFragment;
   };
 
   encodeFunctionData(
@@ -76,7 +76,7 @@ interface VoltRouter01Interface extends ethers.utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: "addLiquidityMTR",
+    functionFragment: "addLiquidityETH",
     values: [
       string,
       boolean,
@@ -135,7 +135,7 @@ interface VoltRouter01Interface extends ethers.utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: "removeLiquidityMTR",
+    functionFragment: "removeLiquidityETH",
     values: [
       string,
       boolean,
@@ -147,7 +147,7 @@ interface VoltRouter01Interface extends ethers.utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: "removeLiquidityMTRSupportingFeeOnTransferTokens",
+    functionFragment: "removeLiquidityETHSupportingFeeOnTransferTokens",
     values: [
       string,
       boolean,
@@ -159,7 +159,7 @@ interface VoltRouter01Interface extends ethers.utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: "removeLiquidityMTRWithPermit",
+    functionFragment: "removeLiquidityETHWithPermit",
     values: [
       string,
       boolean,
@@ -175,7 +175,7 @@ interface VoltRouter01Interface extends ethers.utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: "removeLiquidityMTRWithPermitSupportingFeeOnTransferTokens",
+    functionFragment: "removeLiquidityETHWithPermitSupportingFeeOnTransferTokens",
     values: [
       string,
       boolean,
@@ -212,7 +212,7 @@ interface VoltRouter01Interface extends ethers.utils.Interface {
     values: [string, string]
   ): string;
   encodeFunctionData(
-    functionFragment: "swapExactMTRForTokens",
+    functionFragment: "swapExactETHForTokens",
     values: [
       BigNumberish,
       { from: string; to: string; stable: boolean }[],
@@ -221,7 +221,7 @@ interface VoltRouter01Interface extends ethers.utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: "swapExactMTRForTokensSupportingFeeOnTransferTokens",
+    functionFragment: "swapExactETHForTokensSupportingFeeOnTransferTokens",
     values: [
       BigNumberish,
       { from: string; to: string; stable: boolean }[],
@@ -230,7 +230,7 @@ interface VoltRouter01Interface extends ethers.utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: "swapExactTokensForMTR",
+    functionFragment: "swapExactTokensForETH",
     values: [
       BigNumberish,
       BigNumberish,
@@ -240,7 +240,7 @@ interface VoltRouter01Interface extends ethers.utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: "swapExactTokensForMTRSupportingFeeOnTransferTokens",
+    functionFragment: "swapExactTokensForETHSupportingFeeOnTransferTokens",
     values: [
       BigNumberish,
       BigNumberish,
@@ -281,7 +281,7 @@ interface VoltRouter01Interface extends ethers.utils.Interface {
       BigNumberish
     ]
   ): string;
-  encodeFunctionData(functionFragment: "wmtr", values?: undefined): string;
+  encodeFunctionData(functionFragment: "weth", values?: undefined): string;
 
   decodeFunctionResult(
     functionFragment: "UNSAFE_swapExactTokensForTokens",
@@ -292,7 +292,7 @@ interface VoltRouter01Interface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "addLiquidityMTR",
+    functionFragment: "addLiquidityETH",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "factory", data: BytesLike): Result;
@@ -331,19 +331,19 @@ interface VoltRouter01Interface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "removeLiquidityMTR",
+    functionFragment: "removeLiquidityETH",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "removeLiquidityMTRSupportingFeeOnTransferTokens",
+    functionFragment: "removeLiquidityETHSupportingFeeOnTransferTokens",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "removeLiquidityMTRWithPermit",
+    functionFragment: "removeLiquidityETHWithPermit",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "removeLiquidityMTRWithPermitSupportingFeeOnTransferTokens",
+    functionFragment: "removeLiquidityETHWithPermitSupportingFeeOnTransferTokens",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -352,19 +352,19 @@ interface VoltRouter01Interface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "sortTokens", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "swapExactMTRForTokens",
+    functionFragment: "swapExactETHForTokens",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "swapExactMTRForTokensSupportingFeeOnTransferTokens",
+    functionFragment: "swapExactETHForTokensSupportingFeeOnTransferTokens",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "swapExactTokensForMTR",
+    functionFragment: "swapExactTokensForETH",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "swapExactTokensForMTRSupportingFeeOnTransferTokens",
+    functionFragment: "swapExactTokensForETHSupportingFeeOnTransferTokens",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -379,7 +379,7 @@ interface VoltRouter01Interface extends ethers.utils.Interface {
     functionFragment: "swapExactTokensForTokensSupportingFeeOnTransferTokens",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "wmtr", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "weth", data: BytesLike): Result;
 
   events: {};
 }
@@ -449,12 +449,12 @@ export class VoltRouter01 extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    addLiquidityMTR(
+    addLiquidityETH(
       token: string,
       stable: boolean,
       amountTokenDesired: BigNumberish,
       amountTokenMin: BigNumberish,
-      amountMTRMin: BigNumberish,
+      amountETHMin: BigNumberish,
       to: string,
       deadline: BigNumberish,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
@@ -545,18 +545,18 @@ export class VoltRouter01 extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    removeLiquidityMTR(
+    removeLiquidityETH(
       token: string,
       stable: boolean,
       liquidity: BigNumberish,
       amountTokenMin: BigNumberish,
-      amountMTRMin: BigNumberish,
+      amountETHMin: BigNumberish,
       to: string,
       deadline: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    removeLiquidityMTRSupportingFeeOnTransferTokens(
+    removeLiquidityETHSupportingFeeOnTransferTokens(
       token: string,
       stable: boolean,
       liquidity: BigNumberish,
@@ -567,12 +567,12 @@ export class VoltRouter01 extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    removeLiquidityMTRWithPermit(
+    removeLiquidityETHWithPermit(
       token: string,
       stable: boolean,
       liquidity: BigNumberish,
       amountTokenMin: BigNumberish,
-      amountMTRMin: BigNumberish,
+      amountETHMin: BigNumberish,
       to: string,
       deadline: BigNumberish,
       approveMax: boolean,
@@ -582,7 +582,7 @@ export class VoltRouter01 extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    removeLiquidityMTRWithPermitSupportingFeeOnTransferTokens(
+    removeLiquidityETHWithPermitSupportingFeeOnTransferTokens(
       token: string,
       stable: boolean,
       liquidity: BigNumberish,
@@ -619,7 +619,7 @@ export class VoltRouter01 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[string, string] & { token0: string; token1: string }>;
 
-    swapExactMTRForTokens(
+    swapExactETHForTokens(
       amountOutMin: BigNumberish,
       routes: { from: string; to: string; stable: boolean }[],
       to: string,
@@ -627,7 +627,7 @@ export class VoltRouter01 extends BaseContract {
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    swapExactMTRForTokensSupportingFeeOnTransferTokens(
+    swapExactETHForTokensSupportingFeeOnTransferTokens(
       amountOutMin: BigNumberish,
       routes: { from: string; to: string; stable: boolean }[],
       to: string,
@@ -635,7 +635,7 @@ export class VoltRouter01 extends BaseContract {
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    swapExactTokensForMTR(
+    swapExactTokensForETH(
       amountIn: BigNumberish,
       amountOutMin: BigNumberish,
       routes: { from: string; to: string; stable: boolean }[],
@@ -644,7 +644,7 @@ export class VoltRouter01 extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    swapExactTokensForMTRSupportingFeeOnTransferTokens(
+    swapExactTokensForETHSupportingFeeOnTransferTokens(
       amountIn: BigNumberish,
       amountOutMin: BigNumberish,
       routes: { from: string; to: string; stable: boolean }[],
@@ -682,7 +682,7 @@ export class VoltRouter01 extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    wmtr(overrides?: CallOverrides): Promise<[string]>;
+    weth(overrides?: CallOverrides): Promise<[string]>;
   };
 
   UNSAFE_swapExactTokensForTokens(
@@ -706,12 +706,12 @@ export class VoltRouter01 extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  addLiquidityMTR(
+  addLiquidityETH(
     token: string,
     stable: boolean,
     amountTokenDesired: BigNumberish,
     amountTokenMin: BigNumberish,
-    amountMTRMin: BigNumberish,
+    amountETHMin: BigNumberish,
     to: string,
     deadline: BigNumberish,
     overrides?: PayableOverrides & { from?: string | Promise<string> }
@@ -802,18 +802,18 @@ export class VoltRouter01 extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  removeLiquidityMTR(
+  removeLiquidityETH(
     token: string,
     stable: boolean,
     liquidity: BigNumberish,
     amountTokenMin: BigNumberish,
-    amountMTRMin: BigNumberish,
+    amountETHMin: BigNumberish,
     to: string,
     deadline: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  removeLiquidityMTRSupportingFeeOnTransferTokens(
+  removeLiquidityETHSupportingFeeOnTransferTokens(
     token: string,
     stable: boolean,
     liquidity: BigNumberish,
@@ -824,12 +824,12 @@ export class VoltRouter01 extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  removeLiquidityMTRWithPermit(
+  removeLiquidityETHWithPermit(
     token: string,
     stable: boolean,
     liquidity: BigNumberish,
     amountTokenMin: BigNumberish,
-    amountMTRMin: BigNumberish,
+    amountETHMin: BigNumberish,
     to: string,
     deadline: BigNumberish,
     approveMax: boolean,
@@ -839,7 +839,7 @@ export class VoltRouter01 extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  removeLiquidityMTRWithPermitSupportingFeeOnTransferTokens(
+  removeLiquidityETHWithPermitSupportingFeeOnTransferTokens(
     token: string,
     stable: boolean,
     liquidity: BigNumberish,
@@ -876,7 +876,7 @@ export class VoltRouter01 extends BaseContract {
     overrides?: CallOverrides
   ): Promise<[string, string] & { token0: string; token1: string }>;
 
-  swapExactMTRForTokens(
+  swapExactETHForTokens(
     amountOutMin: BigNumberish,
     routes: { from: string; to: string; stable: boolean }[],
     to: string,
@@ -884,7 +884,7 @@ export class VoltRouter01 extends BaseContract {
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  swapExactMTRForTokensSupportingFeeOnTransferTokens(
+  swapExactETHForTokensSupportingFeeOnTransferTokens(
     amountOutMin: BigNumberish,
     routes: { from: string; to: string; stable: boolean }[],
     to: string,
@@ -892,7 +892,7 @@ export class VoltRouter01 extends BaseContract {
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  swapExactTokensForMTR(
+  swapExactTokensForETH(
     amountIn: BigNumberish,
     amountOutMin: BigNumberish,
     routes: { from: string; to: string; stable: boolean }[],
@@ -901,7 +901,7 @@ export class VoltRouter01 extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  swapExactTokensForMTRSupportingFeeOnTransferTokens(
+  swapExactTokensForETHSupportingFeeOnTransferTokens(
     amountIn: BigNumberish,
     amountOutMin: BigNumberish,
     routes: { from: string; to: string; stable: boolean }[],
@@ -939,7 +939,7 @@ export class VoltRouter01 extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  wmtr(overrides?: CallOverrides): Promise<string>;
+  weth(overrides?: CallOverrides): Promise<string>;
 
   callStatic: {
     UNSAFE_swapExactTokensForTokens(
@@ -969,19 +969,19 @@ export class VoltRouter01 extends BaseContract {
       }
     >;
 
-    addLiquidityMTR(
+    addLiquidityETH(
       token: string,
       stable: boolean,
       amountTokenDesired: BigNumberish,
       amountTokenMin: BigNumberish,
-      amountMTRMin: BigNumberish,
+      amountETHMin: BigNumberish,
       to: string,
       deadline: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
       [BigNumber, BigNumber, BigNumber] & {
         amountToken: BigNumber;
-        amountMTR: BigNumber;
+        amountETH: BigNumber;
         liquidity: BigNumber;
       }
     >;
@@ -1073,20 +1073,20 @@ export class VoltRouter01 extends BaseContract {
       [BigNumber, BigNumber] & { amountA: BigNumber; amountB: BigNumber }
     >;
 
-    removeLiquidityMTR(
+    removeLiquidityETH(
       token: string,
       stable: boolean,
       liquidity: BigNumberish,
       amountTokenMin: BigNumberish,
-      amountMTRMin: BigNumberish,
+      amountETHMin: BigNumberish,
       to: string,
       deadline: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
-      [BigNumber, BigNumber] & { amountToken: BigNumber; amountMTR: BigNumber }
+      [BigNumber, BigNumber] & { amountToken: BigNumber; amountETH: BigNumber }
     >;
 
-    removeLiquidityMTRSupportingFeeOnTransferTokens(
+    removeLiquidityETHSupportingFeeOnTransferTokens(
       token: string,
       stable: boolean,
       liquidity: BigNumberish,
@@ -1099,12 +1099,12 @@ export class VoltRouter01 extends BaseContract {
       [BigNumber, BigNumber] & { amountToken: BigNumber; amountFTM: BigNumber }
     >;
 
-    removeLiquidityMTRWithPermit(
+    removeLiquidityETHWithPermit(
       token: string,
       stable: boolean,
       liquidity: BigNumberish,
       amountTokenMin: BigNumberish,
-      amountMTRMin: BigNumberish,
+      amountETHMin: BigNumberish,
       to: string,
       deadline: BigNumberish,
       approveMax: boolean,
@@ -1113,10 +1113,10 @@ export class VoltRouter01 extends BaseContract {
       s: BytesLike,
       overrides?: CallOverrides
     ): Promise<
-      [BigNumber, BigNumber] & { amountToken: BigNumber; amountMTR: BigNumber }
+      [BigNumber, BigNumber] & { amountToken: BigNumber; amountETH: BigNumber }
     >;
 
-    removeLiquidityMTRWithPermitSupportingFeeOnTransferTokens(
+    removeLiquidityETHWithPermitSupportingFeeOnTransferTokens(
       token: string,
       stable: boolean,
       liquidity: BigNumberish,
@@ -1157,7 +1157,7 @@ export class VoltRouter01 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[string, string] & { token0: string; token1: string }>;
 
-    swapExactMTRForTokens(
+    swapExactETHForTokens(
       amountOutMin: BigNumberish,
       routes: { from: string; to: string; stable: boolean }[],
       to: string,
@@ -1165,7 +1165,7 @@ export class VoltRouter01 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber[]>;
 
-    swapExactMTRForTokensSupportingFeeOnTransferTokens(
+    swapExactETHForTokensSupportingFeeOnTransferTokens(
       amountOutMin: BigNumberish,
       routes: { from: string; to: string; stable: boolean }[],
       to: string,
@@ -1173,7 +1173,7 @@ export class VoltRouter01 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    swapExactTokensForMTR(
+    swapExactTokensForETH(
       amountIn: BigNumberish,
       amountOutMin: BigNumberish,
       routes: { from: string; to: string; stable: boolean }[],
@@ -1182,7 +1182,7 @@ export class VoltRouter01 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber[]>;
 
-    swapExactTokensForMTRSupportingFeeOnTransferTokens(
+    swapExactTokensForETHSupportingFeeOnTransferTokens(
       amountIn: BigNumberish,
       amountOutMin: BigNumberish,
       routes: { from: string; to: string; stable: boolean }[],
@@ -1220,7 +1220,7 @@ export class VoltRouter01 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    wmtr(overrides?: CallOverrides): Promise<string>;
+    weth(overrides?: CallOverrides): Promise<string>;
   };
 
   filters: {};
@@ -1247,12 +1247,12 @@ export class VoltRouter01 extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    addLiquidityMTR(
+    addLiquidityETH(
       token: string,
       stable: boolean,
       amountTokenDesired: BigNumberish,
       amountTokenMin: BigNumberish,
-      amountMTRMin: BigNumberish,
+      amountETHMin: BigNumberish,
       to: string,
       deadline: BigNumberish,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
@@ -1333,18 +1333,18 @@ export class VoltRouter01 extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    removeLiquidityMTR(
+    removeLiquidityETH(
       token: string,
       stable: boolean,
       liquidity: BigNumberish,
       amountTokenMin: BigNumberish,
-      amountMTRMin: BigNumberish,
+      amountETHMin: BigNumberish,
       to: string,
       deadline: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    removeLiquidityMTRSupportingFeeOnTransferTokens(
+    removeLiquidityETHSupportingFeeOnTransferTokens(
       token: string,
       stable: boolean,
       liquidity: BigNumberish,
@@ -1355,12 +1355,12 @@ export class VoltRouter01 extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    removeLiquidityMTRWithPermit(
+    removeLiquidityETHWithPermit(
       token: string,
       stable: boolean,
       liquidity: BigNumberish,
       amountTokenMin: BigNumberish,
-      amountMTRMin: BigNumberish,
+      amountETHMin: BigNumberish,
       to: string,
       deadline: BigNumberish,
       approveMax: boolean,
@@ -1370,7 +1370,7 @@ export class VoltRouter01 extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    removeLiquidityMTRWithPermitSupportingFeeOnTransferTokens(
+    removeLiquidityETHWithPermitSupportingFeeOnTransferTokens(
       token: string,
       stable: boolean,
       liquidity: BigNumberish,
@@ -1407,7 +1407,7 @@ export class VoltRouter01 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    swapExactMTRForTokens(
+    swapExactETHForTokens(
       amountOutMin: BigNumberish,
       routes: { from: string; to: string; stable: boolean }[],
       to: string,
@@ -1415,7 +1415,7 @@ export class VoltRouter01 extends BaseContract {
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    swapExactMTRForTokensSupportingFeeOnTransferTokens(
+    swapExactETHForTokensSupportingFeeOnTransferTokens(
       amountOutMin: BigNumberish,
       routes: { from: string; to: string; stable: boolean }[],
       to: string,
@@ -1423,7 +1423,7 @@ export class VoltRouter01 extends BaseContract {
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    swapExactTokensForMTR(
+    swapExactTokensForETH(
       amountIn: BigNumberish,
       amountOutMin: BigNumberish,
       routes: { from: string; to: string; stable: boolean }[],
@@ -1432,7 +1432,7 @@ export class VoltRouter01 extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    swapExactTokensForMTRSupportingFeeOnTransferTokens(
+    swapExactTokensForETHSupportingFeeOnTransferTokens(
       amountIn: BigNumberish,
       amountOutMin: BigNumberish,
       routes: { from: string; to: string; stable: boolean }[],
@@ -1470,7 +1470,7 @@ export class VoltRouter01 extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    wmtr(overrides?: CallOverrides): Promise<BigNumber>;
+    weth(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
@@ -1495,12 +1495,12 @@ export class VoltRouter01 extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    addLiquidityMTR(
+    addLiquidityETH(
       token: string,
       stable: boolean,
       amountTokenDesired: BigNumberish,
       amountTokenMin: BigNumberish,
-      amountMTRMin: BigNumberish,
+      amountETHMin: BigNumberish,
       to: string,
       deadline: BigNumberish,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
@@ -1584,18 +1584,18 @@ export class VoltRouter01 extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    removeLiquidityMTR(
+    removeLiquidityETH(
       token: string,
       stable: boolean,
       liquidity: BigNumberish,
       amountTokenMin: BigNumberish,
-      amountMTRMin: BigNumberish,
+      amountETHMin: BigNumberish,
       to: string,
       deadline: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    removeLiquidityMTRSupportingFeeOnTransferTokens(
+    removeLiquidityETHSupportingFeeOnTransferTokens(
       token: string,
       stable: boolean,
       liquidity: BigNumberish,
@@ -1606,12 +1606,12 @@ export class VoltRouter01 extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    removeLiquidityMTRWithPermit(
+    removeLiquidityETHWithPermit(
       token: string,
       stable: boolean,
       liquidity: BigNumberish,
       amountTokenMin: BigNumberish,
-      amountMTRMin: BigNumberish,
+      amountETHMin: BigNumberish,
       to: string,
       deadline: BigNumberish,
       approveMax: boolean,
@@ -1621,7 +1621,7 @@ export class VoltRouter01 extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    removeLiquidityMTRWithPermitSupportingFeeOnTransferTokens(
+    removeLiquidityETHWithPermitSupportingFeeOnTransferTokens(
       token: string,
       stable: boolean,
       liquidity: BigNumberish,
@@ -1658,7 +1658,7 @@ export class VoltRouter01 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    swapExactMTRForTokens(
+    swapExactETHForTokens(
       amountOutMin: BigNumberish,
       routes: { from: string; to: string; stable: boolean }[],
       to: string,
@@ -1666,7 +1666,7 @@ export class VoltRouter01 extends BaseContract {
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    swapExactMTRForTokensSupportingFeeOnTransferTokens(
+    swapExactETHForTokensSupportingFeeOnTransferTokens(
       amountOutMin: BigNumberish,
       routes: { from: string; to: string; stable: boolean }[],
       to: string,
@@ -1674,7 +1674,7 @@ export class VoltRouter01 extends BaseContract {
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    swapExactTokensForMTR(
+    swapExactTokensForETH(
       amountIn: BigNumberish,
       amountOutMin: BigNumberish,
       routes: { from: string; to: string; stable: boolean }[],
@@ -1683,7 +1683,7 @@ export class VoltRouter01 extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    swapExactTokensForMTRSupportingFeeOnTransferTokens(
+    swapExactTokensForETHSupportingFeeOnTransferTokens(
       amountIn: BigNumberish,
       amountOutMin: BigNumberish,
       routes: { from: string; to: string; stable: boolean }[],
@@ -1721,6 +1721,6 @@ export class VoltRouter01 extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    wmtr(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    weth(overrides?: CallOverrides): Promise<PopulatedTransaction>;
   };
 }

@@ -50,6 +50,7 @@ async function main() {
       deployer.address,
       veDistImpl.interface.encodeFunctionData("initialize", [veProxy.address, admin.address])
     ) as VeDistUpgradeable;
+    
     const voterImpl = await Deploy.deployContract(deployer, "VoltVoterUpgradeable") as VoltVoterUpgradeable;
     const voterProxy = await Deploy.deployContract(deployer, "contracts/proxy/TransparentUpgradeableProxy.sol:TransparentUpgradeableProxy",
       voterImpl.address,

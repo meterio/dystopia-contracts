@@ -12,6 +12,19 @@ const _abi = [
     type: "fallback",
   },
   {
+    inputs: [],
+    name: "_implementation",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     stateMutability: "payable",
     type: "receive",
   },

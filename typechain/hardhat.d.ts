@@ -189,9 +189,9 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IVoter__factory>;
     getContractFactory(
-      name: "IWMTR",
+      name: "IWETH",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.IWMTR__factory>;
+    ): Promise<Contracts.IWETH__factory>;
     getContractFactory(
       name: "AccessControl",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -514,10 +514,10 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.IVoter>;
     getContractAt(
-      name: "IWMTR",
+      name: "IWETH",
       address: string,
       signer?: ethers.Signer
-    ): Promise<Contracts.IWMTR>;
+    ): Promise<Contracts.IWETH>;
     getContractAt(
       name: "AccessControl",
       address: string,

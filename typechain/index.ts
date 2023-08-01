@@ -45,7 +45,7 @@ export type { IUniswapV2Factory } from "./IUniswapV2Factory";
 export type { IVe } from "./IVe";
 export type { IVeDist } from "./IVeDist";
 export type { IVoter } from "./IVoter";
-export type { IWMTR } from "./IWMTR";
+export type { IWETH } from "./IWETH";
 export type { AccessControl } from "./AccessControl";
 export type { SolidlyLibrary } from "./SolidlyLibrary";
 export type { Migrator } from "./Migrator";
@@ -112,7 +112,7 @@ export { IUniswapV2Factory__factory } from "./factories/IUniswapV2Factory__facto
 export { IVe__factory } from "./factories/IVe__factory";
 export { IVeDist__factory } from "./factories/IVeDist__factory";
 export { IVoter__factory } from "./factories/IVoter__factory";
-export { IWMTR__factory } from "./factories/IWMTR__factory";
+export { IWETH__factory } from "./factories/IWETH__factory";
 export { AccessControl__factory } from "./factories/AccessControl__factory";
 export { SolidlyLibrary__factory } from "./factories/SolidlyLibrary__factory";
 export { Migrator__factory } from "./factories/Migrator__factory";
