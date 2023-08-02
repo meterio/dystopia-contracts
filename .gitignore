@@ -20,3 +20,4 @@ settings.ts
 .env
 docs
 artifacts
+typechain
