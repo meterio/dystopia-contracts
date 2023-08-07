@@ -6,17 +6,21 @@ import "./lib/SafeERC20.sol";
 import "./lib/MerkleProof.sol";
 import "./lib/AccessControl.sol";
 import "./interface/IERC20.sol";
+import "./interface/IVe.sol";
 
 contract Airdrop is AccessControl {
     using SafeERC20 for IERC20;
 
     address public token;
+    address public ve;
     mapping(bytes32 => bool) public roots;
     mapping(bytes32 => mapping(address => bool)) public claimed;
     event SetRoot(bytes32 indexed root, bool valid);
 
-    constructor(address _token) {
+    constructor(address _token, address _ve) {
         token = _token;
+        ve = _ve;
+        IERC20(token).approve(ve, ~uint256(0));
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
     }
 
@@ -53,6 +57,6 @@ contract Airdrop is AccessControl {
         require(!claimed[root][msg.sender], "aleardy claimed!");
         claimed[root][msg.sender] = true;
         require(verify(proof, root, amount), "invalid merkle proof");
-        IERC20(token).safeTransfer(msg.sender, amount);
+        IVe(ve).createLockFor(amount, 365 days, msg.sender);
     }
 }
