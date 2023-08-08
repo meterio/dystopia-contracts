@@ -71,8 +71,16 @@ contract SolidlyLibrary {
         ) = IPair(router.pairFor(tokenIn, tokenOut, stable)).metadata();
         uint256 sample = tokenIn == t0 ? (r0 * dec1) / r1 : (r1 * dec0) / r0;
         a =
-            (_getAmountOut(sample, tokenIn, r0, r1, t0, dec0, dec1, st) *
-                1e18) /
+            (_getAmountOut(
+                sample,
+                tokenIn,
+                r0 * 1e18,
+                r1 * 1e18,
+                t0,
+                dec0,
+                dec1,
+                st
+            ) * 1e18) /
             sample;
         b =
             (_getAmountOut(amountIn, tokenIn, r0, r1, t0, dec0, dec1, st) *
@@ -96,8 +104,16 @@ contract SolidlyLibrary {
         ) = IPair(pair).metadata();
         uint256 sample = tokenIn == t0 ? (r0 * dec1) / r1 : (r1 * dec0) / r0;
         a =
-            (_getAmountOut(sample, tokenIn, r0, r1, t0, dec0, dec1, st) *
-                1e18) /
+            (_getAmountOut(
+                sample,
+                tokenIn,
+                r0 * 1e18,
+                r1 * 1e18,
+                t0,
+                dec0,
+                dec1,
+                st
+            ) * 1e18) /
             sample;
         b =
             (_getAmountOut(amountIn, tokenIn, r0, r1, t0, dec0, dec1, st) *
@@ -129,15 +145,7 @@ contract SolidlyLibrary {
         address tokenIn,
         address tokenOut,
         bool stable
-    )
-        external
-        view
-        returns (
-            uint256,
-            uint256,
-            uint256
-        )
-    {
+    ) external view returns (uint256, uint256, uint256) {
         (
             uint256 dec0,
             uint256 dec1,
