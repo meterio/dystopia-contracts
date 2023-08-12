@@ -13,6 +13,7 @@ contract Airdrop is AccessControl {
 
     address public token;
     address public ve;
+    uint256 public constant LOCK_DURATIOIN = 3600 * 24 * 365 * 2; // 2 years
     mapping(bytes32 => bool) public roots;
     mapping(bytes32 => mapping(address => bool)) public claimed;
     event SetRoot(bytes32 indexed root, bool valid);
@@ -57,6 +58,6 @@ contract Airdrop is AccessControl {
         require(!claimed[root][msg.sender], "aleardy claimed!");
         claimed[root][msg.sender] = true;
         require(verify(proof, root, amount), "invalid merkle proof");
-        IVe(ve).createLockFor(amount, 365 days, msg.sender);
+        IVe(ve).createLockFor(amount, LOCK_DURATIOIN, msg.sender);
     }
 }
