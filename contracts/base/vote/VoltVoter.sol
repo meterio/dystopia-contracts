@@ -90,6 +90,7 @@ contract VoltVoter is IVoter, Reentrancy {
     event Attach(address indexed owner, address indexed gauge, uint tokenId);
     event Detach(address indexed owner, address indexed gauge, uint tokenId);
     event Whitelisted(address indexed whitelister, address indexed token);
+    event RemoveWhitelist(address indexed whitelister, address indexed token);
 
     constructor(
         address _ve,
@@ -111,6 +112,16 @@ contract VoltVoter is IVoter, Reentrancy {
             _whitelist(_tokens[i]);
         }
         minter = _minter;
+    }
+
+    function removeWhitelist(address[] memory _tokens) external {
+        require(msg.sender == minter, "!minter");
+        for (uint i = 0; i < _tokens.length; i++) {
+            address _token = _tokens[i];
+            require(isWhitelisted[_token], "already whitelisted");
+            isWhitelisted[_token] = false;
+            emit Whitelisted(msg.sender, _token);
+        }
     }
 
     /// @dev Amount of tokens required to be hold for whitelisting.
@@ -315,10 +326,10 @@ contract VoltVoter is IVoter, Reentrancy {
     }
 
     /// @dev A gauge should be able to attach a token for preventing transfers/withdraws.
-    function attachTokenToGauge(uint tokenId, address account)
-        external
-        override
-    {
+    function attachTokenToGauge(
+        uint tokenId,
+        address account
+    ) external override {
         require(isGauge[msg.sender], "!gauge");
         if (tokenId > 0) {
             IVe(ve).attachToken(tokenId);
@@ -337,10 +348,10 @@ contract VoltVoter is IVoter, Reentrancy {
     }
 
     /// @dev Detach given token.
-    function detachTokenFromGauge(uint tokenId, address account)
-        external
-        override
-    {
+    function detachTokenFromGauge(
+        uint tokenId,
+        address account
+    ) external override {
         require(isGauge[msg.sender], "!gauge");
         if (tokenId > 0) {
             IVe(ve).detachToken(tokenId);
@@ -426,9 +437,10 @@ contract VoltVoter is IVoter, Reentrancy {
     }
 
     /// @dev Batch claim rewards from given gauges.
-    function claimRewards(address[] memory _gauges, address[][] memory _tokens)
-        external
-    {
+    function claimRewards(
+        address[] memory _gauges,
+        address[][] memory _tokens
+    ) external {
         for (uint i = 0; i < _gauges.length; i++) {
             IGauge(_gauges[i]).getReward(msg.sender, _tokens[i]);
         }
