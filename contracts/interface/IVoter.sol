@@ -19,5 +19,5 @@ interface IVoter {
 
     function init(address[] memory _tokens, address _minter) external;
 
-    function removeWhiteList(address[] memory _tokens) external;
+    function removeWhitelist(address[] memory _tokens) external;
 }
