@@ -109,7 +109,7 @@ contract VoltVoterUpgradeable is IVoter, Reentrancy, Initializable {
         _unlocked = 1;
     }
 
-    function init(address[] memory _tokens, address _minter) external {
+    function init(address[] memory _tokens, address _minter) external override{
         require(msg.sender == minter, "!minter");
         for (uint i = 0; i < _tokens.length; i++) {
             _whitelist(_tokens[i]);
@@ -117,7 +117,7 @@ contract VoltVoterUpgradeable is IVoter, Reentrancy, Initializable {
         minter = _minter;
     }
 
-    function removeWhitelist(address[] memory _tokens) external {
+    function removeWhitelist(address[] memory _tokens) external override{
         require(msg.sender == minter, "!minter");
         for (uint i = 0; i < _tokens.length; i++) {
             address _token = _tokens[i];

@@ -114,7 +114,7 @@ contract VoltVoter is IVoter, Reentrancy {
         minter = _minter;
     }
 
-    function removeWhitelist(address[] memory _tokens) external {
+    function removeWhitelist(address[] memory _tokens) external override{
         require(msg.sender == minter, "!minter");
         for (uint i = 0; i < _tokens.length; i++) {
             address _token = _tokens[i];

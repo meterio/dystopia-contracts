@@ -9,21 +9,15 @@ interface IVoter {
 
     function detachTokenFromGauge(uint _tokenId, address account) external;
 
-    function emitDeposit(
-        uint _tokenId,
-        address account,
-        uint amount
-    ) external;
+    function emitDeposit(uint _tokenId, address account, uint amount) external;
 
-    function emitWithdraw(
-        uint _tokenId,
-        address account,
-        uint amount
-    ) external;
+    function emitWithdraw(uint _tokenId, address account, uint amount) external;
 
     function distribute(address _gauge) external;
 
     function notifyRewardAmount(uint amount) external;
 
     function init(address[] memory _tokens, address _minter) external;
+
+    function removeWhiteList(address[] memory _tokens) external;
 }
