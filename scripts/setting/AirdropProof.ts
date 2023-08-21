@@ -28,6 +28,7 @@ async function main() {
     console.log("verify:", tree.verify(proof, leaf, root));
     console.log("proof", proof);
     users[i].proof = proof;
+    users[i].address = users[i].address.toLowerCase();
   }
   leavesJson.users = users;
   leavesJson.root = root;

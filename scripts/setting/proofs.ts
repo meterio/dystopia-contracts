@@ -14,7 +14,7 @@ async function main() {
   for (let i = 0; i < users.length; i++) {
     console.log(users[i]);
     writeFileSync(
-      "./scripts/setting/proofs/" + users[i].address + ".json",
+      "./scripts/setting/proofs/" + users[i].address.toLowerCase() + ".json",
       JSON.stringify(users[i])
     );
   }
