@@ -24,7 +24,7 @@ abstract contract MultiRewardsPoolBase is Reentrancy, IMultiRewardsPool {
 
     /// @dev Rewards are released over 7 days
     uint internal constant DURATION = 7 days;
-    uint internal constant PRECISION = 10**18;
+    uint internal constant PRECISION = 10 ** 18;
     uint internal constant MAX_REWARD_TOKENS = 10;
 
     /// Default snx staking contract implementation
@@ -60,6 +60,8 @@ abstract contract MultiRewardsPoolBase is Reentrancy, IMultiRewardsPool {
         public rewardPerTokenCheckpoints;
     /// @notice The number of checkpoints for each token
     mapping(address => uint) public rewardPerTokenNumCheckpoints;
+
+    bool public checkAmount;
 
     event Deposit(address indexed from, uint amount);
     event Withdraw(address indexed from, uint amount);
@@ -117,12 +119,9 @@ abstract contract MultiRewardsPoolBase is Reentrancy, IMultiRewardsPool {
                 rewardRate[token]) / derivedSupply);
     }
 
-    function derivedBalance(address account)
-        external
-        view
-        override
-        returns (uint)
-    {
+    function derivedBalance(
+        address account
+    ) external view override returns (uint) {
         return _derivedBalance(account);
     }
 
@@ -132,12 +131,10 @@ abstract contract MultiRewardsPoolBase is Reentrancy, IMultiRewardsPool {
         return (_remaining * rewardRate[token]) / PRECISION;
     }
 
-    function earned(address token, address account)
-        external
-        view
-        override
-        returns (uint)
-    {
+    function earned(
+        address token,
+        address account
+    ) external view override returns (uint) {
         return _earned(token, account);
     }
 
@@ -147,6 +144,10 @@ abstract contract MultiRewardsPoolBase is Reentrancy, IMultiRewardsPool {
 
     function registerRewardToken(address token) external onlyOperator {
         _registerRewardToken(token);
+    }
+
+    function setCheckAmount(bool _checkAmount) external onlyOperator {
+        checkAmount = _checkAmount;
     }
 
     function _registerRewardToken(address token) internal {
@@ -244,9 +245,9 @@ abstract contract MultiRewardsPoolBase is Reentrancy, IMultiRewardsPool {
         _updateDerivedBalanceAndWriteCheckpoints(account);
     }
 
-    function _updateDerivedBalanceAndWriteCheckpoints(address account)
-        internal
-    {
+    function _updateDerivedBalanceAndWriteCheckpoints(
+        address account
+    ) internal {
         uint __derivedBalance = derivedBalances[account];
         derivedSupply -= __derivedBalance;
         __derivedBalance = _derivedBalance(account);
@@ -262,11 +263,10 @@ abstract contract MultiRewardsPoolBase is Reentrancy, IMultiRewardsPool {
     //**************************************************************************
 
     // earned is an estimation, it won't be exact till the supply > rewardPerToken calculations have run
-    function _earned(address token, address account)
-        internal
-        view
-        returns (uint)
-    {
+    function _earned(
+        address token,
+        address account
+    ) internal view returns (uint) {
         // zero checkpoints means zero deposits
         if (numCheckpoints[account] == 0) {
             return 0;
@@ -321,12 +321,9 @@ abstract contract MultiRewardsPoolBase is Reentrancy, IMultiRewardsPool {
         return reward;
     }
 
-    function _derivedBalance(address account)
-        internal
-        view
-        virtual
-        returns (uint)
-    {
+    function _derivedBalance(
+        address account
+    ) internal view virtual returns (uint) {
         // supposed to be implemented in a parent contract
         return balanceOf[account];
     }
@@ -431,11 +428,9 @@ abstract contract MultiRewardsPoolBase is Reentrancy, IMultiRewardsPool {
     }
 
     /// @dev Returns the last time the reward was modified or periodFinish if the reward has ended
-    function _lastTimeRewardApplicable(address token)
-        internal
-        view
-        returns (uint)
-    {
+    function _lastTimeRewardApplicable(
+        address token
+    ) internal view returns (uint) {
         return Math.min(block.timestamp, periodFinish[token]);
     }
 
@@ -443,11 +438,10 @@ abstract contract MultiRewardsPoolBase is Reentrancy, IMultiRewardsPool {
     //************************ NOTIFY ******************************************
     //**************************************************************************
 
-    function _notifyRewardAmount(address token, uint amount)
-        internal
-        virtual
-        lock
-    {
+    function _notifyRewardAmount(
+        address token,
+        uint amount
+    ) internal virtual lock {
         require(token != underlying, "Wrong token for rewards");
         require(amount > 0, "Zero amount");
         require(isRewardToken[token], "Token not allowed");
@@ -468,7 +462,7 @@ abstract contract MultiRewardsPoolBase is Reentrancy, IMultiRewardsPool {
             // not sure what the reason was in the original solidly implementation for this restriction
             // however, by design probably it is a good idea against human errors
             require(
-                amount > _left / PRECISION,
+                !checkAmount || (checkAmount && amount > _left / PRECISION),
                 "Amount should be higher than remaining rewards"
             );
             IERC20(token).safeTransferFrom(msg.sender, address(this), amount);
@@ -483,11 +477,10 @@ abstract contract MultiRewardsPoolBase is Reentrancy, IMultiRewardsPool {
     //************************ CHECKPOINTS *************************************
     //**************************************************************************
 
-    function getPriorBalanceIndex(address account, uint timestamp)
-        external
-        view
-        returns (uint)
-    {
+    function getPriorBalanceIndex(
+        address account,
+        uint timestamp
+    ) external view returns (uint) {
         return _getPriorBalanceIndex(account, timestamp);
     }
 
@@ -496,11 +489,10 @@ abstract contract MultiRewardsPoolBase is Reentrancy, IMultiRewardsPool {
     /// @param account The address of the account to check
     /// @param timestamp The timestamp to get the balance at
     /// @return The balance the account had as of the given block
-    function _getPriorBalanceIndex(address account, uint timestamp)
-        internal
-        view
-        returns (uint)
-    {
+    function _getPriorBalanceIndex(
+        address account,
+        uint timestamp
+    ) internal view returns (uint) {
         uint nCheckpoints = numCheckpoints[account];
         if (nCheckpoints == 0) {
             return 0;
@@ -520,19 +512,17 @@ abstract contract MultiRewardsPoolBase is Reentrancy, IMultiRewardsPool {
         return supplyCheckpoints.findLowerIndex(nCheckpoints, timestamp);
     }
 
-    function getPriorRewardPerToken(address token, uint timestamp)
-        external
-        view
-        returns (uint, uint)
-    {
+    function getPriorRewardPerToken(
+        address token,
+        uint timestamp
+    ) external view returns (uint, uint) {
         return _getPriorRewardPerToken(token, timestamp);
     }
 
-    function _getPriorRewardPerToken(address token, uint timestamp)
-        internal
-        view
-        returns (uint, uint)
-    {
+    function _getPriorRewardPerToken(
+        address token,
+        uint timestamp
+    ) internal view returns (uint, uint) {
         uint nCheckpoints = rewardPerTokenNumCheckpoints[token];
         if (nCheckpoints == 0) {
             return (0, 0);

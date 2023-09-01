@@ -20,4 +20,6 @@ interface IVoter {
     function init(address[] memory _tokens, address _minter) external;
 
     function removeWhitelist(address[] memory _tokens) external;
+
+    function setCheckAmount(address _gaugeOrBribe, bool _checkAmount) external;
 }

@@ -81,6 +81,10 @@ contract MinterUpgradeable is AccessControl, Initializable {
         _voter().init(tokens, address(this));
     }
 
+    function setCheckAmount(address _gaugeOrBribe, bool _checkAmount) external {
+        _voter().setCheckAmount(_gaugeOrBribe, _checkAmount);
+    }
+
     function removeWhitelist(address[] memory tokens) public onlyAdmin {
         _voter().removeWhitelist(tokens);
     }

@@ -96,14 +96,16 @@ contract VoltVoter is IVoter, Reentrancy {
         address _ve,
         address _factory,
         address _gaugeFactory,
-        address _bribeFactory
+        address _bribeFactory,
+        address _minter
     ) {
         ve = _ve;
         factory = _factory;
         token = IVe(_ve).token();
         gaugeFactory = _gaugeFactory;
         bribeFactory = _bribeFactory;
-        minter = msg.sender;
+        minter = _minter;
+        _unlocked = 1;
     }
 
     function init(address[] memory _tokens, address _minter) external override {
@@ -114,7 +116,7 @@ contract VoltVoter is IVoter, Reentrancy {
         minter = _minter;
     }
 
-    function removeWhitelist(address[] memory _tokens) external override{
+    function removeWhitelist(address[] memory _tokens) external override {
         require(msg.sender == minter, "!minter");
         for (uint i = 0; i < _tokens.length; i++) {
             address _token = _tokens[i];
@@ -277,6 +279,11 @@ contract VoltVoter is IVoter, Reentrancy {
         require(msg.sender == IERC721(ve).ownerOf(_tokenId), "!owner");
         require(IVe(ve).balanceOfNFT(_tokenId) > _listingFee(), "!power");
         IMultiRewardsPool(_gaugeOrBribe).registerRewardToken(_token);
+    }
+
+    function setCheckAmount(address _gaugeOrBribe, bool _checkAmount) external {
+        require(msg.sender == minter, "!minter");
+        IMultiRewardsPool(_gaugeOrBribe).setCheckAmount(_checkAmount);
     }
 
     /// @dev Remove a token from a gauge/bribe allowed rewards list.

@@ -68,8 +68,16 @@ contract Minter is AccessControl {
         return IVoter(IController(controller).voter());
     }
 
+    function setActiveperiod(uint256 _activeperiod) public onlyAdmin {
+        activeperiod = _activeperiod;
+    }
+
     function whiteList(address[] memory tokens) public onlyAdmin {
         _voter().init(tokens, address(this));
+    }
+
+    function setCheckAmount(address _gaugeOrBribe, bool _checkAmount) external {
+        _voter().setCheckAmount(_gaugeOrBribe, _checkAmount);
     }
 
     function removeWhitelist(address[] memory tokens) public onlyAdmin {
