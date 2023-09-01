@@ -56,7 +56,7 @@ describe("lib tests", function() {
       await ethers.getContractFactory("SolidlyLibrary", owner)
     ).deploy(router.address)) as SolidlyLibrary;
 
-    let pairAddr = await router.pairFor(weth.address, mtrg.address, false);
+    let pairAddr = await router.pairFor(weth.address, mtrg.address, true);
     pair = (await ethers.getContractAt(
       "VoltPair",
       pairAddr,
@@ -73,7 +73,7 @@ describe("lib tests", function() {
     let receipt = await router.addLiquidity(
       weth.address,
       mtrg.address,
-      false,
+      true,
       "999999933349839087",
       "1032520068817628733217",
       "0",
@@ -90,7 +90,7 @@ describe("lib tests", function() {
   });
 
   it("getMinimumValue", async function() {
-    let mini = await library.getMinimumValue(mtrg.address, weth.address, false);
+    let mini = await library.getMinimumValue(mtrg.address, weth.address, true);
     console.log(mini);
   });
 
@@ -99,7 +99,7 @@ describe("lib tests", function() {
       parseUnits("1"),
       mtrg.address,
       weth.address,
-      false
+      true
     );
     console.log(diff);
   });

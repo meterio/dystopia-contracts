@@ -74,8 +74,8 @@ contract SolidlyLibrary {
             (_getAmountOut(
                 sample,
                 tokenIn,
-                r0 * 1e18,
-                r1 * 1e18,
+                r0 * 1e6,
+                r1 * 1e6,
                 t0,
                 dec0,
                 dec1,
@@ -107,8 +107,8 @@ contract SolidlyLibrary {
             (_getAmountOut(
                 sample,
                 tokenIn,
-                r0 * 1e18,
-                r1 * 1e18,
+                r0 * 1e6,
+                r1 * 1e6,
                 t0,
                 dec0,
                 dec1,
