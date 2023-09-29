@@ -1,0 +1,44 @@
+[
+  {
+    "contract": "VoltFactory"
+  },
+  {
+    "contract": "VoltPair"
+  },
+  {
+    "contract": "VoltRouter01"
+  },
+  {
+    "contract": "Bribe"
+  },
+  {
+    "contract": "Gauge"
+  },
+  {
+    "contract": "Minter"
+  },
+  {
+    "contract": "Volt"
+  },
+  {
+    "contract": "Ve"
+  },
+  {
+    "contract": "VeDist"
+  },
+  {
+    "contract": "VoltVoter"
+  },
+  {
+    "contract": "ProxyAdmin"
+  },
+  {
+    "contract": "TransparentUpgradeableProxy"
+  },
+  {
+    "contract": "Airdrop"
+  },
+  {
+    "contract": "Controller"
+  }
+]

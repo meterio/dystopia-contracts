@@ -33,7 +33,7 @@ async function main() {
   leavesJson.users = users;
   leavesJson.root = root;
   jsonArr[leavesIndex] = leavesJson;
-  writeFileSync(json, JSON.stringify(jsonArr));
+  writeFileSync(json, JSON.stringify(jsonArr, null, 2));
 
   console.log("root", root);
 }

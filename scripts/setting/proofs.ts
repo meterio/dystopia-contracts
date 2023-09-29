@@ -1,7 +1,4 @@
-import { ethers } from "hardhat";
 import { readFileSync, writeFileSync } from "fs";
-import { MerkleTree } from "merkletreejs";
-import { BigNumber } from "ethers";
 
 const json = "./scripts/setting/leaves.json";
 const leavesIndex = 0;
@@ -14,8 +11,8 @@ async function main() {
   for (let i = 0; i < users.length; i++) {
     console.log(users[i]);
     writeFileSync(
-      "./scripts/setting/proofs/" + users[i].address.toLowerCase() + ".json",
-      JSON.stringify(users[i])
+      "./scripts/setting/proofs2/" + users[i].address.toLowerCase() + ".json",
+      JSON.stringify(users[i], null, 2)
     );
   }
 }
